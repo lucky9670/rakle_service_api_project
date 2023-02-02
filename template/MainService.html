@@ -1,0 +1,265 @@
+{% extends 'main.html' %} {% load static %} {% block title %}Adminty - Premium Admin Template by Colorlib{% endblock title %} {% block content %}
+{% block script %}
+
+<script type="text/javascript">
+    
+    // function listCities()
+    // {
+    //     var countryid = $("[name='main_cat']").val();
+    //     console.log(countryid)
+    //     $('#citylist').html('');
+    //     $.ajax({
+    //     type: "GET",
+    //     dataType: "json",
+    //     data: {'countryid':countryid},
+    //     url: "{% url 'loadmainct' %}",
+        
+    //     success: function (data) {   // `data` is the return of the `load_cities` view function
+    //       $("#sub_cat").html(data);  // replace the contents of the city input with the data that came from the server
+    //     }
+    //     });
+    //     // console.log(data)
+    // }
+    function listCities()
+    {
+    // $("#main_cat").change(function () {
+      var url = $("#indexForm").attr("data-courses-url");  // get the url of the `load_courses` view
+      var countryid = $("[name='main_cat']").val();  // get the selected programming ID from the HTML input
+        console.log(countryid)
+        console.log(url)
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/load-courses/)
+        data: {'countryid':countryid},
+        success: function (data) {   // `data` is the return of the `load_courses` view function
+          $("#sub_cat").html(data);  // replace the contents of the course input with the data that came from the server
+        }
+      });
+
+    };
+    
+
+
+</script>
+{% endblock %} 
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- Main-body start -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- Page-header start -->
+                <div class="page-header">
+                    <div class="row align-items-end">
+                        <div class="col-lg-8">
+                            <div class="page-header-title">
+                                <div class="d-inline">
+                                    <h4>Add/View Main Service</h4>
+                                    <span>From here you can add & view Main Service.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="page-header-breadcrumb">
+                                <ul class="breadcrumb-title">
+                                    <li class="breadcrumb-item">
+                                        <a href="index-1.htm"> <i class="feather icon-home"></i> </a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="#!">Main Service</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Page-header end -->
+
+                <!-- Page body start -->
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!-- Register your self card start -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Add New Main Service</h5>
+                                    <span>Fill all the details correctoly.</span>
+
+                                </div>
+
+                                    <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Add Main Services
+                                </button>
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add Main Servises</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card-block">
+                                                <div class="j-wrapper j-wrapper-640">
+                                                    <form action="{% url 'mainservice' %}" method="POST" id="indexForm" data-courses-url="{% url 'loadmainct' %}" class="j-pro " enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <div class="j-content">
+                                                            <!-- start Catagory Name -->
+                                                            <div>
+                                                                <label class="j-label">Catagory Name</label>
+                                                                <div class="j-unit">
+                                                                    <div class="j-input ">
+                                                                        <label class="j-icon-right" for="Cat_Name">
+                                                                                                <i class="icofont icofont-list"></i>
+                                                                                            </label>
+                                                                        <select name="main_cat" id="main_cat" onchange="listCities()">
+                                                                                <option value="opt1">Select Main Category</option>
+                                                                                {% for s in cat %}
+                                                                                <option value={{s.id}}>{{s.main_cat_name}}</option>
+                                                                                {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- end Catagory name -->
+                                                            <!-- start Catagory Name -->
+                                                            <div>
+                                                                <label class="j-label">Sub Catagory Name</label>
+                                                                <div class="j-unit">
+                                                                    <div class="j-input ">
+                                                                        <label class="j-icon-right" for="Sub_Cat_Name">
+                                                                                                <i class="icofont icofont-list"></i>
+                                                                                            </label>
+                                                                            <select name="sub_cat" id ="sub_cat">
+                                                                                    <!-- <option value="opt1">Select Main Category</option>
+                                                                                    {% for r in subcat %}
+                                                                                    <option value={{r.id}}>{{r.cat_name}}</option>
+                                                                                    {% endfor %} -->
+                                                                            </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- end Catagory name -->
+                                                            <!-- start Main Service Name -->
+                                                            <div>
+                                                                <label class="j-label">Main Service Name</label>
+                                                                <div class="j-unit">
+                                                                    <div class="j-input ">
+                                                                        <label class="j-icon-right" for="Main_Service_Name">
+                                                                                                <i class="icofont icofont-list"></i>
+                                                                                            </label>
+                                                                        <input type="text" placeholder="Enter Main Service Name" class="form-control" id="Main_Service_Name" name="main_ser">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- end Main Service name -->
+                                                            <!-- start Main Service Image -->
+                                                            <div>
+                                                                <div>
+                                                                    <label class="j-label">Main Service Image</label>
+                                                                </div>
+                                                                <div class="j-unit">
+                                                                    <div class="j-input">
+                                                                        <label class="j-icon-right" for="Main_Service">
+                                                                                                <i class="icofont icofont-ui-image"></i>
+                                                                                            </label>
+                                                                        <input type="file" class="form-control" id="Main_Service" name="main_ser_img">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- end Main Service Image -->
+                                                            <!-- start response from server -->
+                                                            <div class="j-response"></div>
+                                                            <!-- end response from server -->
+                                                        </div>
+                                                        <!-- end /.content -->
+                                                        <div class="j-footer">
+                                                            <button type="submit" class="btn btn-primary">Add Catagory</button>
+                                                        </div>
+                                                        <!-- end /.footer -->
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+                                    </div>
+                                </div>
+
+
+                                
+                            </div>
+                            <!-- Register your self card end -->
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Main Service Data</h5>
+                                    <span>All the Main Services are visible here.</span>
+
+                                </div>
+                                <div class="card-block table-border-style">
+                                    <div class="table-responsive">
+                                        <table class="table table-styling">
+                                            <thead>
+                                                <tr class="table-primary">
+                                                    <th>SNO</th>
+                                                    <th>Main Catagory Name</th>
+                                                    <th>Catagory Name</th>
+                                                    <th>Main Service Name</th>
+                                                    <th>Image</th>
+                                                    <th>TransDate</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in mser %}
+                                                <tr>
+                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                    <td>{{i.main_cat_name}}</td>
+                                                    <td>{{i.cat_name}}</td>
+                                                    <td>{{i.main_service_name}}</td>
+                                                    <td><img src="{{i.main_service_image}}" class="img-radius" height="50px" width="50px" alt="User-Profile-Image"></td>
+                                                    <td>{{i.created_at}}</td>
+                                                    <td>{{i.status}}</td>
+                                                    <td>
+
+                                                        <a href="{% url 'mainserviceedit' i.id %}"><i class="fa fa-edit"
+                                                                                    aria-hidden="true" ></i></a> ||
+                                                        <a href="{% url 'mainservicedelete' i.id %}"><i class="fa fa-trash-o"></i></a>
+                                                    </td>
+
+
+                                                   
+
+
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Page body end -->
+            </div>
+        </div>
+        <!-- Main-body end -->
+
+        <div id="styleSelector">
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

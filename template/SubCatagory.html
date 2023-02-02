@@ -1,0 +1,208 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}Adminty - Premium Admin Template by Colorlib{% endblock title %}
+{% block content %}
+
+                    <div class="pcoded-content">
+                        <div class="pcoded-inner-content">
+                            <!-- Main-body start -->
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <!-- Page-header start -->
+                                    <div class="page-header">
+                                        <div class="row align-items-end">
+                                            <div class="col-lg-8">
+                                                <div class="page-header-title">
+                                                    <div class="d-inline">
+                                                        <h4>Add/View Sub Catagory</h4>
+                                                        <span>From here you can add & view sub catagory.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="page-header-breadcrumb">
+                                                    <ul class="breadcrumb-title">
+                                                        <li class="breadcrumb-item">
+                                                            <a href="index-1.htm"> <i class="feather icon-home"></i> </a>
+                                                        </li>
+                                                        <li class="breadcrumb-item"><a href="#!">Sub Catagory</a>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Page-header end -->
+
+                                    <!-- Page body start -->
+                                    <div class="page-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <!-- Register your self card start -->
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h5>Add New Sub Catagory</h5>
+                                                        <span>Fill all the details correctoly.</span>
+
+                                                    </div>
+
+
+                                                    <!-- Button trigger modal -->
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                                        Add Sub Category
+                                                    </button>
+                                                    
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Add Sub Category</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="card-block">
+                                                                    <div class="j-wrapper j-wrapper-640">
+                                                                        <form action="{% url 'subcat' %}" method="POST" class="j-pro " enctype="multipart/form-data">
+                                                                            {% csrf_token %}
+                                                                            <div class="j-content">
+                                                                                <!-- start Catagory Name -->
+                                                                                <div>
+                                                                                    <label class="j-label">Catagory Name</label>
+                                                                                    <div class="j-unit">
+                                                                                        <div class="j-input ">
+                                                                                            <label class="j-icon-right" for="Cat_Name">
+                                                                                                <i class="icofont icofont-list"></i>
+                                                                                            </label>
+                                                                                            <select name="main_cat">
+                                                                                                <option value="opt1">Select Main Category</option>
+                                                                                                {% for s in cat %}
+                                                                                                <option value="{{s.id}}">{{s.main_cat_name}}</option>
+                                                                                                {% endfor %}
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- end Catagory name -->
+                                                                                <!-- start Sub Catagory Name -->
+                                                                                <div>
+                                                                                    <label class="j-label">Sub Catagory Name</label>
+                                                                                    <div class="j-unit">
+                                                                                        <div class="j-input ">
+                                                                                            <label class="j-icon-right" for="Sub_Cat_Name">
+                                                                                                <i class="icofont icofont-list"></i>
+                                                                                            </label>
+                                                                                            <input type="text" placeholder="Enter Sub Catagory Name" class="form-control" id="sub_cat" name="sub_cat">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- end Sub Catagory name -->
+                                                                                <!-- start Sub Catagory Image -->
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <label class="j-label">Catagory Image</label>
+                                                                                    </div>
+                                                                                    <div class="j-unit">
+                                                                                        <div class="j-input">
+                                                                                            <label class="j-icon-right" for="Sub_Cat_Img">
+                                                                                                <i class="icofont icofont-ui-image"></i>
+                                                                                            </label>
+                                                                                            <input type="file" class="form-control" id="sub_cat_img" name="sub_cat_img">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- end Sub Catagory Image -->
+                                                                                <!-- start response from server -->
+                                                                                <div class="j-response"></div>
+                                                                                <!-- end response from server -->
+                                                                            </div>
+                                                                            <!-- end /.content -->
+                                                                            <div class="j-footer">
+                                                                                <button type="submit" class="btn btn-primary">Add Catagory</button>
+                                                                            </div>
+                                                                            <!-- end /.footer -->
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+                                                    
+                                                </div>
+                                                <!-- Register your self card end -->
+                                            </div>
+
+                                            <div class="col-sm-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h5>Sub Catagory Data</h5>
+                                                        <span>All the sub catagories are visible here.</span>
+
+                                                    </div>
+                                                    <div class="card-block table-border-style">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-styling">
+                                                                <thead>
+                                                                    <tr class="table-primary">
+                                                                        <th>SNO</th>
+                                                                        <th>Main Catagory</th>
+                                                                        <th>Catagory</th>
+                                                                        <th>Image</th>
+                                                                        <th>Status</th>
+                                                                        <th>Craeted</th>
+                                                                        <th class="text-center">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% for i in sub %}
+                                                                    <tr>
+                                                                        <th scope="row">{{ forloop.counter }}</th>
+                                                                        <td>{{i.main_cat_name}}</td>
+                                                                        <td>{{i.cat_name}}</td>
+                                                                        <td><img src="{{i.cat_image}}" class="img-radius" height="50px" width="50px" alt="User-Profile-Image"></td>
+                                                                        <td>{{i.status}}</td>
+                                                                        <td>{{i.created_at}}</td>
+                                                                        <td>
+
+                                                                            <a href="{% url 'subcatedit1' i.id %}"><i class="fa fa-edit"
+                                                                                    aria-hidden="true" ></i></a> ||
+                                                                            <a href="{% url 'subcatdelete' i.id %}"><i
+                                                                                    class="fa fa-trash-o"></i></a>
+                                                                        </td>
+
+
+                                                            
+                                                                    </tr> 
+                                                                    {% endfor %} 
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Page body end -->
+                                </div>
+                            </div>
+                            <!-- Main-body end -->
+
+                            <div id="styleSelector">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

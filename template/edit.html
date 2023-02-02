@@ -1,0 +1,80 @@
+ {% extends 'main.html' %} {% load static %} {% block title %}Adminty - Premium Admin Template by Colorlib{% endblock title %} {% block content %}
+
+<div class="page-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- Register your self card start -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Add New Catagory</h5>
+                    <span>Fill all the details correctoly.</span>
+
+                </div>
+                <div class="card-block">
+                    <div class="j-wrapper j-wrapper-640">
+                        <form action="{% url 'catagoryedit' empdata.id  %}" method="post" class="j-pro " enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="j-content">
+                                <!-- start Catagory Name -->
+                                <div>
+                                    <label class="j-label">Catagory Name</label>
+                                    <div class="j-unit">
+                                        <div class="j-input ">
+                                            <label class="j-icon-right" for="Cat_Name">
+                                                                    <i class="icofont icofont-list"></i>
+                                                                </label>
+                                            <input type="text" placeholder="Enter Catagory Name" value="{{empdata.main_cat_name}}" class="form-control" id="cat_name" name="cat_name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end Catagory name -->
+                                <div>
+                                    <label class="j-label">Status</label>
+                                    <div class="j-unit">
+                                        <div class="j-input ">
+                                            <label class="j-icon-right" for="Cat_Name">
+                                            </label>
+                                            
+                                            <select name="status1">
+                                                <option value={{empdata.status}}>{{empdata.status}}</option>
+                                                <option value=true>True</option>
+                                                <option value=false>False</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- start Catagory Image -->
+                                <div>
+                                    <div>
+                                        <label class="j-label">Catagory Image</label>
+                                    </div>
+                                    <div class="j-unit">
+                                        <div class="j-input">
+                                            <label class="j-icon-right" for="Cat_Img">
+                                                                    <i class="icofont icofont-ui-image"></i>
+                                                                </label>
+
+                                            {% if empdata.main_cat_image %}
+                                                <img src="{{empdata.main_cat_image}}" alt="image here" height="50px" width="50px" class="prod-size">
+                                            {% endif %}
+                                            <input type="file" class="form-control" id="cat_img" name="cat_img">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end Catagory Image -->
+                                <!-- start response from server -->
+                                <div class="j-response"></div>
+                                <!-- end response from server -->
+                            </div>
+                            <!-- end /.content -->
+                            <div class="j-footer">
+                                <button type="submit" class="aclass btn btn-primary"> Add Catagory</button> {% comment %} <input type="submit" value="Submit" class="btn btn-primary"> {% endcomment %}
+                            </div>
+                            <!-- end /.footer -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Register your self card end -->
+        </div>
+        {% endblock %}

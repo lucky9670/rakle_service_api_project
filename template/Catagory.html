@@ -1,0 +1,317 @@
+{% extends 'main.html' %} {% load static %} {% block title %}Adminty - Premium Admin Template by Colorlib{% endblock title %} {% block script %}
+
+<!-- <script type="text/javascript">
+    $(document).ready(function() {
+        BindStudents();
+        // BindStudents();
+    });
+
+    
+    function BindStudents() {
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: "https://rakle-services-api.herokuapp.com/api/v2/main_cat/",
+            success: function(result) {
+                    $('#maincat').append(result);
+                    console.log(response)
+                
+                // var empdata = result.length;
+                // var structureDiv = "";
+                // for (let i = 0; i < totalCount; i++) {
+                //     structureDiv += "<tr>" +
+                //         "              <td scope='row'>" + result[i].id + "</td>" +
+                //         "              <td>" + result[i].main_cat_name + "</td>" +
+                //         "              <td> <img src=" + result[i].main_cat_image + " class='img-radius' height='50px' width='50px' alt='User-Profile-Image'> </td>" +
+                //         "              <td>" + result[i].status + "</td>" +
+                //         "              <td>" + result[i].created_at + "</td>" +
+                //         "              <td><a href='#' data-toggle='modal' data-target='#exampleModalCenter " + result[i].id > +"<i class='fa fa-edit' aria-hidden='true' ></i></a> || <a href='category/delete/" + result[i].id + "'><i class='fa fa-trash-o'></i></a></td>" +
+                //         "</tr>";
+
+                // }
+
+                //$("#maincat").html(structureDiv);
+
+            },
+            error : function(xhr,errmsg,err) {
+                    alert(xhr.status + ": " + xhr.responseText);
+                }
+        });
+
+    }
+
+
+
+    var formData = new FormData();
+
+    $(document).on('click', '#submit', function(e) {
+        formData.append('cat_name', $('#cat_name').val())
+        formData.append('cat_img', $('#cat_img')[0].files[0])
+        formData.append('action', '/')
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+        $.ajax({
+            type: 'POST',
+            url: '{% url "catagory" %}',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: function() {
+                alert('The post has been created!');
+                BindStudents();
+
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ":" + xhr.responseText)
+            }
+        })
+    })
+</script> -->
+
+{% endblock %} {% block content %}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- Main-body start -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- Page-header start -->
+                <div class="page-header">
+                    <div class="row align-items-end">
+                        <div class="col-lg-8">
+                            <div class="page-header-title">
+                                <div class="d-inline">
+                                    <h4>Add/View Catagory</h4>
+                                    <span>From here you can add & view catagory.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="page-header-breadcrumb">
+                                <ul class="breadcrumb-title">
+                                    <li class="breadcrumb-item">
+                                        <a href="index-1.htm"> <i class="feather icon-home"></i> </a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="#!">Catagory</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Page-header end -->
+
+                <!-- Page body start -->
+                <div class="page-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!-- Register your self card start -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Add New Catagory</h5>
+                                    <span>Fill all the details correctoly.</span>
+
+                                </div>
+
+                                
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Add Category
+                                </button>
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card-block">
+                                                <div class="j-wrapper j-wrapper-640">
+                                                    <form action=" {% url 'catagory' %} " method="POST" class="j-pro js-book-create-form" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <div class="j-content">
+                                                            <!-- start Catagory Name -->
+                                                            <div>
+                                                                <label class="j-label">Catagory Name</label>
+                                                                <div class="j-unit">
+                                                                    <div class="j-input ">
+                                                                        <label class="j-icon-right" for="Cat_Name">
+                                                                            <i class="icofont icofont-list"></i>
+                                                                        </label>
+                                                                        <input type="text" placeholder="Enter Catagory Name" class="form-control" id="cat_name" name="cat_name">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- end Catagory name -->
+                                                            <!-- start Catagory Image -->
+                                                            <div>
+                                                                <div>
+                                                                    <label class="j-label">Catagory Image</label>
+                                                                </div>
+                                                                <div class="j-unit">
+                                                                    <div class="j-input">
+                                                                        <label class="j-icon-right" for="Cat_Img">
+                                                                            <i class="icofont icofont-ui-image"></i>
+                                                                        </label>
+                                                                        <input type="file" class="form-control" id="cat_img" name="cat_img">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- end Catagory Image -->
+                                                            <!-- start response from server -->
+                                                            <div class="j-response"></div>
+                                                            <!-- end response from server -->
+                                                        </div>
+                                                        <!-- end /.content -->
+                                                        <div class="j-footer">
+                                                            <button type="submit" class="aclass btn btn-primary"> Add
+                                                                Catagory</button>
+                                                        </div>
+                                                        <!-- end /.footer -->
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    </div>
+                                </div>
+
+
+                                
+                            </div>
+                            <!-- Register your self card end -->
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Catagory Data</h5>
+                                    <span>All the catagories are visible here.</span>
+
+                                </div>
+                                <div class="card-block table-border-style">
+                                    <div class="table-responsive">
+                                        <table class="table table-styling">
+                                            <thead>
+                                                <tr class="table-primary">
+                                                    <th>SNO</th>
+                                                    <th>Main Catagory</th>
+                                                    <th>Image</th>
+                                                    <th>Status</th>
+                                                    <th>Craeted</th>
+                                                    <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="maincat">
+                                                {% for i in empdata %}
+                                                <tr>
+                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                    <td>{{i.main_cat_name}}</td>
+                                                    <td><img src="{{i.main_cat_image}}" class="img-radius" height="50px" width="50px" alt="User-Profile-Image"></td>
+                                                    <td>{{i.status}}</td>
+                                                    <td>{{i.created_at}}</td>
+                                                    <td>
+
+                                                        <a href="category/edit/{{i.id}}"><i class="fa fa-edit"
+                                                                aria-hidden="true" ></i></a> ||
+                                                        <a href="category/delete/{{i.id}}"><i
+                                                                class="fa fa-trash-o"></i></a>
+                                                    </td>
+                                                    
+                                                </tr>
+                                                
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <!-- Modal -->
+
+                                        {% comment %} <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Category
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="/category/edit/{{id}}" method="POST" class="j-pro " enctype="multipart/form-data">
+                                                            {% csrf_token %}
+                                                            <div class="j-content">
+                                                                <div>
+                                                                    <label class="j-label">Catagory Name</label>
+                                                                    <div class="j-unit">
+                                                                        <div class="j-input ">
+                                                                            <label class="j-icon-right" for="Cat_Name">
+                                                                            </label>
+                                                                            <input type="text" value="{{main_cat_name}}" class="form-control" name="cat_name">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div>
+                                                                    <label class="j-label">Status</label>
+                                                                    <div class="j-unit">
+                                                                        <div class="j-input ">
+                                                                            <label class="j-icon-right" for="Cat_Name">
+                                                                            </label>
+                                                                            
+                                                                            <select name="status1">
+                                                                                <option value={{status}}>{{status}}</option>
+                                                                                <option value=true>True</option>
+                                                                                <option value=false>False</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <div>
+                                                                        <label class="j-label">Catagory Image</label>
+                                                                    </div>
+                                                                    <div class="j-unit">
+                                                                        <div class="j-input">
+                                                                            <label class="j-icon-right" for="Cat_Img">
+                                                                            </label>
+                                                                            <input type="file" class="form-control" id="cat_img" name="cat_img" value="{{main_cat_image}}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Save
+                                                            changes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> {% endcomment %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Page body end -->
+            </div>
+        </div>
+        <!-- Main-body end -->
+
+        <div id="styleSelector">
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
