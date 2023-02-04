@@ -14,10 +14,14 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from django.utils import timezone
 from rest_framework.parsers import MultiPartParser, FormParser
-
+from admin_api.serialization.main_category_serializer import MainCategorySerializer
+from admin_api.serialization.cat_serializer import CategorySerializer
+from admin_api.serialization.main_service_serializer import MainServiceSerializer
+from admin_api.serialization.service_serializer import ServiceSerializer
 
 class MainCategoryView(GenericAPIView):
     serializer_class = MainCategorySerializer
+    parser_classes = (MultiPartParser,)
 
     @swagger_auto_schema(tags=['Main Category'])
     def get(self,request):
@@ -62,19 +66,13 @@ class MainCategoryView(GenericAPIView):
 
             try:
                 updatedata=MainCategory.objects.get(id=id)
-
-                
-
                 proj_check=MainCategory.objects.filter(main_cat_name=info['main_cat_name']).exclude(id=id).count()
-
                 if proj_check !=0:
-                    return JsonResponse({'result':'false','response':'project name already exist'},safe=False)
-                
+                    return JsonResponse({'result':'false','response':'project name already exist'},safe=False)       
                 updatedata.main_cat_name=info['main_cat_name']
                 updatedata.status=info.get('status')
                 updatedata.main_cat_image=info.get('main_cat_image')
                 updatedata.modified_at=timezone.now()
-
                 updatedata.save()
             except Exception as e:
                 return JsonResponse({"result": "false", "response": "something went wrong."}, safe=False)
@@ -96,9 +94,7 @@ class Delete_MainCat(APIView):
 
     
 class CategoryView(GenericAPIView):
-
     serializer_class = CategorySerializer
-
     @swagger_auto_schema(tags=['Category'])
     def get(self,request):
         serializer_class=CategorySerializer(data=request.data)
@@ -110,16 +106,13 @@ class CategoryView(GenericAPIView):
 
     @swagger_auto_schema(tags=['Category'])
     def post(self, request, *args, **kwargs):
-
         try:
             check_data = request.data
         except Exception as e:
             return JsonResponse({'result': 'fail', 'response': 'Something went wrong, Please check.'}, safe=False)
-        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         plan = serializer.save()
-
         return Response({
             "Cat": CategorySerializer(plan, context=self.get_serializer_context()).data,
         })

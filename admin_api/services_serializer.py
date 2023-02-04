@@ -2,25 +2,25 @@ from rest_framework import serializers
 from .models import *
 from django.contrib.auth import authenticate
 
-class MainCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MainCategory
-        fields = "__all__"
+# class MainCategorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MainCategory
+#         fields = "__all__"
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = "__all__"
+# class CategorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Category
+#         fields = "__all__"
 
-class MainServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MainService
-        fields = "__all__"
+# class MainServiceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = MainService
+#         fields = "__all__"
 
-class ServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Service
-        fields = "__all__"
+# class ServiceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Service
+#         fields = "__all__"
 
 
 class PackageSerializer(serializers.ModelSerializer):

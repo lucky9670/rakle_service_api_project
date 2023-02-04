@@ -152,6 +152,7 @@ urlpatterns = [
     path('api/v2/checkout', Checkout.as_view(), name='order-checkout'),
 
     path('', include('adminpanel.urls')),
+    path('', include('admin_api.urls')),
     path('swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'admin/', admin.site.urls),
     # url(r'api/', include(userapi.urls)),
