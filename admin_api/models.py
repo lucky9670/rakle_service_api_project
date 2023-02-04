@@ -13,7 +13,7 @@ from django.utils import timezone
 class MainCategory(BaseModel):
     main_cat_name = models.CharField(max_length=500)
     status =models.BooleanField(default=True)
-    main_cat_image = models.CharField(max_length=500)
+    main_cat_image = models.ImageField(upload_to='main_category',blank=False, null=False)
 
     def __str__(self):
          return self.main_cat_name
@@ -22,7 +22,7 @@ class Category(BaseModel):
     main_cat_name = models.ForeignKey(MainCategory, on_delete=models.CASCADE)
     cat_name = models.CharField(max_length=500)
     status =models.BooleanField(default=False)
-    cat_image = models.CharField(max_length=500)
+    cat_image = models.ImageField(upload_to='category',blank=False, null=False)
     def __str__(self):
          return self.cat_name
 
@@ -31,7 +31,7 @@ class MainService(BaseModel):
     cat_name = models.ForeignKey(Category, on_delete=models.CASCADE)
     main_service_name = models.CharField(max_length=500)
     status =models.BooleanField(default=False)
-    main_service_image = models.CharField(max_length=500)
+    main_service_image = models.ImageField(upload_to='main_service',blank=False, null=False)
     def __str__(self):
          return self.main_service_name
 
@@ -42,7 +42,7 @@ class Service(BaseModel):
     main_service_name = models.ForeignKey(MainService, on_delete=models.CASCADE)
     service_name = models.CharField(max_length=500)
     status =models.BooleanField(default=False)
-    service_image = models.CharField(max_length=500)
+    service_image = models.ImageField(upload_to='service',blank=False, null=False)
     service_charge = models.CharField(max_length=1000)
     service_time = models.CharField(max_length=1000)
     discount = models.CharField(max_length=1000)
