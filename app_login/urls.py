@@ -1,7 +1,7 @@
 from django.urls import path
-from django.urls.conf import include
-from . import views
+from app_login.all_customer_views import CustomerView, CustomerLoginView
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('api/v2/customer-register', CustomerView.as_view(), name='customer-registration'),
+    path('api/v2/customer-login', CustomerLoginView.as_view(), name='customer-login'),
 ]

@@ -3,7 +3,7 @@ from django.urls import path
 from django.urls.conf import include
 from rest_framework.routers import DefaultRouter
 from admin_api.viewsets.city_views import Delete_City
-from app_login.user_api import LoginView, SignupView
+# from app_login.user_api import LoginView, SignupView
 from django.conf.urls import url
 from rest_framework_simplejwt import views as jwt_views
 from admin_api.service_views import *
@@ -143,9 +143,9 @@ urlpatterns = [
     path('api/v2/userreview/<int:ur_id>', Delete_UserReview.as_view(), name='user-review-delete'),
 
     # Add to Cart
-    path('api/v2/addtocart', AddToCartView.as_view(), name='addtocart-get'),
-    path('api/v2/addtocart', AddToCartView.as_view(), name='addtocart-post'),
-    path('api/v2/addtocart/<int:ur_id>', Delete_AddToCart.as_view(), name='addtocart-delete'),
+    # path('api/v2/addtocart', AddToCartView.as_view(), name='addtocart-get'),
+    # path('api/v2/addtocart', AddToCartView.as_view(), name='addtocart-post'),
+    # path('api/v2/addtocart/<int:ur_id>', Delete_AddToCart.as_view(), name='addtocart-delete'),
 
     # Order or payment gateway
     path('api/v2/payment', PaymentGateway.as_view(), name='order-service'),
@@ -153,6 +153,7 @@ urlpatterns = [
 
     path('', include('adminpanel.urls')),
     path('', include('admin_api.urls')),
+    path('', include('app_login.urls')),
     path('swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'admin/', admin.site.urls),
     # url(r'api/', include(userapi.urls)),
