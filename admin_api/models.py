@@ -7,6 +7,7 @@ from lib.models import BaseModel
 from django.utils.translation import gettext_lazy as _
 # from .constants import PaymentStatus
 from django.utils import timezone
+from app_login.models import UserSignupModel
 
 # Create your models here.
 
@@ -61,7 +62,7 @@ class ServiceFAQ(models.Model):
 class AboutService(BaseModel):
     service_name = models.ForeignKey(Service, on_delete=models.CASCADE)
     title = models.CharField(max_length=500)
-    image = models.CharField(max_length=500)
+    image = models.ImageField(upload_to='service_about', blank=False, null=False)
     video = models.CharField(max_length=1000)
     discription = models.CharField(max_length=10000)
     notes = models.CharField(max_length=1000)
@@ -174,12 +175,11 @@ class UserReview(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
 
 # Add to Cart
-class AddToCart(models.Model):
+class AddToCart(BaseModel):
+    user = models.ForeignKey(UserSignupModel, on_delete=models.CASCADE)
     service = models.ForeignKey(Service,on_delete=models.CASCADE)
-    service_name = models.CharField(max_length=500)
-    service_amount = models.CharField(max_length=100)
-    service_image = models.CharField(max_length=100)
     service_quantity = models.CharField(max_length=100)
+    status = models.BooleanField(default=True)
 
 
 class PaymentStatus:

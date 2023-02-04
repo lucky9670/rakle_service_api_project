@@ -66,3 +66,22 @@ class UserSignupModel(AbstractBaseUser):
         return True
 
     
+class AllCustomer(AbstractBaseUser):
+    phone = models.CharField(unique=True, max_length=15)
+    name = models.CharField(max_length=250, default='')
+    gender = models.CharField(max_length=10, default='')
+    image = models.ImageField(upload_to="customer", blank=False, null=False)
+    otp = models.CharField(max_length=30)
+
+    USERNAME_FIELD = 'phone'
+    REQUIRED_FIELDS = ['phone', ]
+
+    def __str__(self):
+        return self.phone
+
+class CustomerManager(BaseUserManager):
+    def create_user(self, phone, password=None):
+        user = self.model(phone=phone)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
