@@ -12,27 +12,9 @@ import os
 
 # Create your views here.
 def catagory(request):
-    if request.method=="POST" and request.FILES['cat_img']:
-        name = request.POST.get('cat_name')
-        doc = request.FILES
-        myfile=doc['cat_img']
-        fs = FileSystemStorage()
-        filename = fs.save(f"Main_Cat/{myfile.name}", myfile)
-        url = fs.url(filename)
-        data = {
-            'main_cat_name':name,
-            'main_cat_image':url
-        }
-        print(data)
-        u  = settings.Main_Cat
-        print(u)
-        r = requests.post(url = settings.Main_Cat, data = data)
-        # r = Student.objects.create(nam)
-        response = MainCategory.objects.all()
-        return render(request, 'Catagory.html', {"empdata": response})
-    else:
-        response = MainCategory.objects.all()
-        return render(request, 'Catagory.html', {"empdata": response})
+    # data = requests.get(url = settings.Main_Cat)
+    # print(data.json())
+    return render(request, 'Catagory.html')
 
 def catdelete(request, n):
     r = requests.delete(url = (f'{settings.Main_Cat}/{n}'),data = {'id':n})

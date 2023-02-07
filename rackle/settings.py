@@ -74,7 +74,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend', ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 50
 }
 
 
@@ -186,8 +186,8 @@ razorpay_api_key = "rzp_test_uVCG3c6N9E14UK"
 razorpay_api_secret_key = "EWN4GqNqyP2ZJSUmhQS5Yogq"
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-Main_Cat = 'https://rakle-api.herokuapp.com/api/v2/main_cat'
+base_url = 'http://127.0.0.1:8000/api/v1/'
+Main_Cat = f'{base_url}main-category/'
 # Main_Cat_Post = 'https://rakle-api.herokuapp.com/api/v2/main_cat/create_cat/'
 
 Sub_Cat = 'https://rakle-api.herokuapp.com/api/v2/cat'
