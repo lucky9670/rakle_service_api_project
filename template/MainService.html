@@ -2,25 +2,7 @@
 {% block script %}
 
 <script type="text/javascript">
-    
-    // function listCities()
-    // {
-    //     var countryid = $("[name='main_cat']").val();
-    //     console.log(countryid)
-    //     $('#citylist').html('');
-    //     $.ajax({
-    //     type: "GET",
-    //     dataType: "json",
-    //     data: {'countryid':countryid},
-    //     url: "{% url 'loadmainct' %}",
-        
-    //     success: function (data) {   // `data` is the return of the `load_cities` view function
-    //       $("#sub_cat").html(data);  // replace the contents of the city input with the data that came from the server
-    //     }
-    //     });
-    //     // console.log(data)
-    // }
-    function listCities()
+function listCities()
     {
     // $("#main_cat").change(function () {
       var url = $("#indexForm").attr("data-courses-url");  // get the url of the `load_courses` view
@@ -36,7 +18,121 @@
       });
 
     };
+
+$(document).ready(function() {
+        BindStudents();
+    });
+
     
+    function BindStudents() {
+        // debugger;
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: "http://127.0.0.1:8000/api/v1/main-service/",
+            success: function(result) {
+                    console.log(result.results)
+                
+                let empdata = result.results.length;
+                let structureDiv = "";
+                $('#mainser').html("");
+                for (let i = 0; i < empdata; i++) {
+                     structureDiv = `<tr>
+                                            <th scope="row">${i+1}</th>
+                                            <td>${result.results[i].main_cat_name}</td>
+                                            <td>${result.results[i].cat_name}</td>
+                                            <td>${result.results[i].main_service_name}</td>
+                                            <td><img src="${result.results[i].main_service_image}" class="img-radius" height="50px"
+                                                    width="50px" alt="User-Profile-Image"></td>
+                                            <td>${result.results[i].status}</td>
+                                            <td>${result.results[i].created_at}</td>
+                                            <td>
+
+                                                <a href="category/edit/${result.results[i].id}"><i class="fa fa-edit"
+                                                        aria-hidden="true"></i></a> ||
+                                                <a data-toggle="modal" data-target="#delete-modal" data-catid="${result.results[i].id}"><i
+                                                        class="fa fa-trash-o"></i></a>
+                                            </td>
+
+                                        </tr>`
+                                       
+                        $('#mainser').append(structureDiv);
+                }
+            },
+            error : function(xhr,errmsg,err) {
+                    alert(xhr.status + ": " + xhr.responseText);
+                }
+        });
+
+    }
+
+/// add catagory
+    function resetForm() 
+    {
+        $('#indexForm')[0].reset();
+    }
+
+    var formData = new FormData();
+
+    $(document).on('click', '#submit', function (e) {
+        console.log("Inside Form ");
+        formData.append('main_cat_name', $('#main_cat').val())
+        formData.append('cat_name', $('#sub_cat').val())
+        formData.append('main_service_name', $('#main_ser').val())
+        formData.append('main_service_image', $('#main_ser_img')[0].files[0])
+        formData.append('action', 'mainservice/')
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+        $.ajax({
+            type: 'POST',
+            url: "http://127.0.0.1:8000/api/v1/main-service/",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: function () {
+                swal("Success!", "Main Service Added Successfully!", "success");
+                BindStudents();
+                $("#exampleModal").modal('hide');
+                resetForm()
+            },
+            error: function (xhr, errmsg, err) {
+                swal("Failed!", "Something went wrong!", "error");
+                console.log(xhr.status + ":" + xhr.responseText)
+                resetForm()
+            }
+        })
+    })
+
+
+/// delete catagory
+
+
+    $(document).on('show.bs.modal','#delete-modal', function(e) { 
+        // debugger;// when the delete modal opens
+    var imageId = $(e.relatedTarget).data('catid'); // get the image id
+    console.log(imageId);
+    $(document).on('click', '#deletebtn', function (e) {
+    
+        $.ajax({
+            type: 'DELETE',
+            url: `http://127.0.0.1:8000/api/v1/main-service/${imageId}/`,
+            success: function (rsp) {
+                // debugger;
+                $("#delete-modal").modal('hide');
+                BindStudents();
+                swal("Success!", "Main Service Deleted Successfully!", "success");
+            },
+            error: function (xhr, errmsg, err) {
+                $("#delete-model").modal('hide');
+                swal("Failed!", "Something went wrong!", "error");
+                console.log(xhr.status + ":" + xhr.responseText)
+            }
+        })
+    });
+    // and put it in the delete button that calls the AJAX
+});
+
 
 
 </script>
@@ -73,6 +169,27 @@
                     </div>
                 </div>
                 <!-- Page-header end -->
+
+                <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Delete Main Service</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          Are You Sure!, You Want to delete ?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" id="deletebtn" class="btn btn-danger" data-delete-catid="">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
 
                 <!-- Page body start -->
                 <div class="page-body">
@@ -131,14 +248,10 @@
                                                                 <div class="j-unit">
                                                                     <div class="j-input ">
                                                                         <label class="j-icon-right" for="Sub_Cat_Name">
-                                                                                                <i class="icofont icofont-list"></i>
-                                                                                            </label>
-                                                                            <select name="sub_cat" id ="sub_cat">
-                                                                                    <!-- <option value="opt1">Select Main Category</option>
-                                                                                    {% for r in subcat %}
-                                                                                    <option value={{r.id}}>{{r.cat_name}}</option>
-                                                                                    {% endfor %} -->
-                                                                            </select>
+                                                                            <i class="icofont icofont-list"></i>
+                                                                        </label>
+                                                                        <select name="sub_cat" id ="sub_cat">
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -151,7 +264,7 @@
                                                                         <label class="j-icon-right" for="Main_Service_Name">
                                                                                                 <i class="icofont icofont-list"></i>
                                                                                             </label>
-                                                                        <input type="text" placeholder="Enter Main Service Name" class="form-control" id="Main_Service_Name" name="main_ser">
+                                                                        <input type="text" placeholder="Enter Main Service Name" class="form-control" id="main_ser" name="main_ser">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -166,7 +279,7 @@
                                                                         <label class="j-icon-right" for="Main_Service">
                                                                                                 <i class="icofont icofont-ui-image"></i>
                                                                                             </label>
-                                                                        <input type="file" class="form-control" id="Main_Service" name="main_ser_img">
+                                                                        <input type="file" class="form-control" id="main_ser_img" name="main_ser_img">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -177,7 +290,7 @@
                                                         </div>
                                                         <!-- end /.content -->
                                                         <div class="j-footer">
-                                                            <button type="submit" class="btn btn-primary">Add Catagory</button>
+                                                            <button type="submit" id="submit" class="btn btn-primary">Add Catagory</button>
                                                         </div>
                                                         <!-- end /.footer -->
                                                     </form>
@@ -217,29 +330,8 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                {% for i in mser %}
-                                                <tr>
-                                                    <th scope="row">{{ forloop.counter }}</th>
-                                                    <td>{{i.main_cat_name}}</td>
-                                                    <td>{{i.cat_name}}</td>
-                                                    <td>{{i.main_service_name}}</td>
-                                                    <td><img src="{{i.main_service_image}}" class="img-radius" height="50px" width="50px" alt="User-Profile-Image"></td>
-                                                    <td>{{i.created_at}}</td>
-                                                    <td>{{i.status}}</td>
-                                                    <td>
-
-                                                        <a href="{% url 'mainserviceedit' i.id %}"><i class="fa fa-edit"
-                                                                                    aria-hidden="true" ></i></a> ||
-                                                        <a href="{% url 'mainservicedelete' i.id %}"><i class="fa fa-trash-o"></i></a>
-                                                    </td>
-
-
-                                                   
-
-
-                                                </tr>
-                                                {% endfor %}
+                                            <tbody id="mainser">
+                                                
                                             </tbody>
                                         </table>
                                     </div>
