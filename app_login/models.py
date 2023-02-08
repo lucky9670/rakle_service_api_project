@@ -1,70 +1,84 @@
 from django.db import models
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, AbstractBaseUser, UserManager
+from django.db.models.deletion import DO_NOTHING
+from lib.models import BaseModel
 
 
-class SignUpManager(BaseUserManager):
-    def create_user(self, email, username, age, name, password=None):
-        if not email:
-            raise ValueError("insert user")
-        if not username:
-            raise ValueError("insert username")
-        if not name:
-            raise ValueError("insert name")
-        if not age:
-            raise ValueError("insert age")
-        user = self.model(email=self.normalize_email(email),username=username,age=age,name=name,)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+# class SignUpManager(BaseUserManager):
+#     def create_user(self, phone, password=None):
+#         if not phone:
+#             raise ValueError("insert phone")
+#         # if not username:
+#         #     raise ValueError("insert username")
+    
+#         user = self.model(phone=phone)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
 
-    def create_superuser(self, email, username, age, name, password):
+#     def create_superuser(self, phone, password):
 
-        user = self.create_user(
-            email=self.normalize_email(email),
-            username=username,
-            password=password,
-            age=age,
-            name=name,
-        )
-        user.is_admin = True
-        user.is_staff = True
-        user.is_superuser = True
-
-        user.save(using=self._db)
-        return user
+#         user = self.create_user(
+#             phone=phone,
+#             # username=username,
+#             password=password,
+#         )
+#         user.is_admin = True
+#         user.is_staff = True
+#         user.is_superuser = True
+#         user.save(using=self._db)
+#         return user
 
 
-class UserSignupModel(AbstractBaseUser):
-    GENDER = [('male', 'Male'),
-                ('famal', 'Femal'),
-                ('other', 'Other')]
-    email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    age = models.CharField(max_length=15)
-    name = models.CharField(max_length=15)
-    username = models.CharField(max_length=15, unique=True)
-    phone_number = models.CharField(max_length=30, null=True, blank=True)
-    address = models.CharField(max_length=500)
-    date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
-    last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
-    gender = models.CharField(max_length=50, null=False, choices=GENDER, default='unknown')
-    is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "name", "age",]
-    objects = SignUpManager()
+class UserSignupModel(AbstractUser):
+    ADMIN = 1
+    FRANCHISER = 2
+    VENDER = 3
 
+    ROLE_CHOICES = (
+        (ADMIN, 'Admin'),
+        (FRANCHISER, 'Franchiser'),
+        (VENDER, 'Vender')
+    )
+    USERNAME_FIELD = 'phone'
+    REQUIRED_FIELDS = ['name', 'username']
+    """
+        Inherits from default User of Django and extends the fields.
+        The following fields are part of Django User Model:
+        | id
+        | password
+        | last_login
+        | is_superuser
+        | username
+        | first_name
+        | last_name
+        | email
+        | is_staff
+        | is_active
+        | date_joined
+        """
+    name = models.CharField(max_length=100,null=True,blank=True)
+    phone = models.CharField(max_length=20, unique=True, null=False, db_index=True, error_messages={
+        'unique': "Phone Number already exists"
+    })
+    # username = models.CharField(max_length=15, unique=True)
+    franchiser = models.ForeignKey("self",related_name="parent",on_delete=DO_NOTHING,null=True,blank=True)
+    role =  models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=3)
+
+    objects_original = UserManager()
     def __str__(self):
-        return self.email
+        return self.name + self.phone
 
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
-
-    def has_module_perms(self, app_label):
-        return True
-
+    @property
+    def to_json(self):
+        _to_json = {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'name':self.name,
+        }
+        return _to_json
     
 class AllCustomer(AbstractBaseUser):
     phone = models.CharField(unique=True, max_length=15)
@@ -85,3 +99,8 @@ class CustomerManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+
+class CustomerDevice(BaseModel):
+    web_id = models.CharField(max_length=250)
+    app_id = models.CharField(max_length=250)

@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import UserSignupModel, AllCustomer
+from .models import UserSignupModel, AllCustomer, CustomerDevice
 # Register your models here.
 
-@admin.register(UserSignupModel)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ['email', 'name', 'age', 'username', 'address','phone_number','gender']
-
+# @admin.register(UserSignupModel)
+# class UserAdmin(admin.ModelAdmin):
+#     list_display = ['email', 'name', 'age', 'username', 'address','phone_number','gender']
+admin.site.register(UserSignupModel)
+admin.site.register(CustomerDevice)
 @admin.register(AllCustomer)
 class UserAdmin(admin.ModelAdmin):
     list_display = ["id", 'phone','password', 'otp', 'name']

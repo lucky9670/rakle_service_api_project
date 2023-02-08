@@ -7,7 +7,8 @@ from lib.models import BaseModel
 from django.utils.translation import gettext_lazy as _
 # from .constants import PaymentStatus
 from django.utils import timezone
-from app_login.models import UserSignupModel
+from app_login.models import AllCustomer, CustomerDevice
+from django.db.models.deletion import DO_NOTHING
 
 # Create your models here.
 
@@ -176,10 +177,11 @@ class UserReview(models.Model):
 
 # Add to Cart
 class AddToCart(BaseModel):
-    user = models.ForeignKey(UserSignupModel, on_delete=models.CASCADE)
+    user = models.ForeignKey(AllCustomer, related_name="customer", on_delete=DO_NOTHING, blank=True, null=True)
     service = models.ForeignKey(Service,on_delete=models.CASCADE)
     service_quantity = models.CharField(max_length=100)
     status = models.BooleanField(default=True)
+    user_device_id = models.ForeignKey(CustomerDevice, related_name='user_device',on_delete=DO_NOTHING, blank=True, null=True)
 
 
 class PaymentStatus:
