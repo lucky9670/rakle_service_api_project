@@ -89,6 +89,12 @@ SWAGGER_SETTINGS = {
     }
 }
 
+REST_KNOX = {
+    'USER_SERIALIZER': 'app_login.user_serializer.ResiterSerializer',
+    # 'TOKEN_TTL': timedelta(minutes=30),
+    'TOKEN_TTL': None,
+
+}
 
 ROOT_URLCONF = 'rackle.urls'
 
