@@ -59,7 +59,7 @@ class CustomerLoginView(GenericAPIView):
 
 class CustomerUpdateView(GenericAPIView):
     serializer_class = AllCustomerSerializer
-    parser_classes = (MultiPartParser, )
+    # parser_classes = (MultiPartParser, )
 
     @swagger_auto_schema(tags=['Customer Login System'])
     @action(detail=False, methods=['post'])
