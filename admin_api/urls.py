@@ -8,7 +8,9 @@ from admin_api.viewsets.main_service_view import MainServiceView
 from admin_api.viewsets.service_views import ServiceView
 from admin_api.viewsets.service_about_view import AboutServiceView
 from admin_api.viewsets.add_to_cart_views import AddToCartView
-
+from admin_api.viewsets.payment_gateway import PaymentGateway, Checkout
+from admin_api.viewsets.cart_view import CartView
+from admin_api.viewsets.address_view import AddressView
 
 main_cat_router = routers.DefaultRouter()
 main_cat_router.register(r'^main-category', MainCategoryView, basename='main-category')
@@ -25,16 +27,30 @@ service_router.register(r'^service', ServiceView, basename='service')
 about_service_router = routers.DefaultRouter()
 about_service_router.register(r'^about-service', AboutServiceView, basename='about-service')
 
+cart_router = routers.DefaultRouter()
+cart_router.register(r'^cart', CartView, basename='cart')
+
 add_to_cart_router = routers.DefaultRouter()
 add_to_cart_router.register(r'^addtocart', AddToCartView, basename='about-service')
 
+place_order = routers.DefaultRouter()
+place_order.register(r'^orders', PaymentGateway, basename='orders')
 
+handller = routers.DefaultRouter()
+handller.register(r'^v1', Checkout, basename='handlerequest')
+
+address = routers.DefaultRouter()
+address.register(r"^address", AddressView, basename="address")
 urlpatterns = [
     url(r'^api/v1/', include(main_cat_router.urls)),
     url(r'^api/v1/', include(cat_router.urls)),
     url(r'^api/v1/', include(main_service_router.urls)),
     url(r'^api/v1/', include(service_router.urls)),
     url(r'^api/v1/', include(about_service_router.urls)),
+    url(r'^api/v1/', include(cart_router.urls)),
     url(r'^api/v1/', include(add_to_cart_router.urls)),
+    url(r'^api/v1/', include(place_order.urls)),
+    url(r'^api/', include(handller.urls)),
+    url(r'^api/v1/', include(address.urls)),
 ]
 

@@ -1,13 +1,18 @@
 from rest_framework import serializers
-from admin_api.models import *
+from admin_api.models import Order
 from django.contrib.auth import authenticate
 
 class OrderSerializer(serializers.Serializer):
-    amount = serializers.IntegerField()
-    # status = serializers.BooleanField()
-    currancy = serializers.CharField(max_length=500)
-    # payment_capture = serializers.CharField(max_length=500)
+    address = serializers.IntegerField(required = True)
+    customer = serializers.IntegerField(required = True)
+    cart_detail = serializers.IntegerField(required = True)
+    total_amount = serializers.FloatField(required = True)
+    delivery_date = serializers.DateField(required = True)
+    time_slot = serializers.TimeField(required = True)
 
+    # class Meta:
+    #     model = Order
+    #     fields = "__all__"
 
 class CheckoutSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=500)

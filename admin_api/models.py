@@ -174,22 +174,33 @@ class UserReview(models.Model):
     rating = models.IntegerField(default=1)
     created_at = models.DateField(auto_now_add=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-
+class Cart(BaseModel):
+    user = models.ForeignKey(AllCustomer, on_delete=models.CASCADE, blank=True, null=True)
+    user_device_id = models.ForeignKey(CustomerDevice, on_delete=models.CASCADE, blank=True, null=True)
 # Add to Cart
 class AddToCart(BaseModel):
     user = models.ForeignKey(AllCustomer, related_name="customer", on_delete=DO_NOTHING, blank=True, null=True)
-    service = models.ForeignKey(Service,on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name="cart_service")
     service_quantity = models.CharField(max_length=100)
-    status = models.BooleanField(default=True)
+    service_amount = models.CharField(max_length=100)
+    checkouted = models.BooleanField(default=False)
     user_device_id = models.ForeignKey(CustomerDevice, related_name='user_device',on_delete=DO_NOTHING, blank=True, null=True)
-
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+class Address(BaseModel):
+    longitude = models.CharField(max_length=50)
+    latitude = models.CharField(max_length=50)
+    address = models.CharField(max_length=500)
+    appartment = models.CharField(max_length=500)
+    flat_no = models.CharField(max_length=500)
+    save_as = models.CharField(max_length=50)
+    user = models.ForeignKey(AllCustomer, on_delete=models.CASCADE)
 
 class PaymentStatus:
     SUCCESS = "Success"
     FAILURE = "Failure"
     PENDING = "Pending"
 
-class Order(models.Model):
+class Order(BaseModel):
     status_choices = (
         (1, 'Not Packed'),
         (2, 'Ready For Shipment'),
@@ -202,12 +213,15 @@ class Order(models.Model):
         (3, 'PENDING'),
     )
     # user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    status = models.IntegerField(choices = status_choices, default=1)
-
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    customer = models.ForeignKey(AllCustomer, on_delete=models.CASCADE)
+    cart_detail = models.ForeignKey(AddToCart, on_delete=models.CASCADE)
+    delivery_date = models.DateField()
+    time_slot = models.TimeField()
     total_amount = models.FloatField()
+    delevery_status = models.IntegerField(choices = status_choices, default=1)
     payment_status = models.IntegerField(choices = payment_status_choices, default=3)
     order_id = models.CharField(unique=True, max_length=100, null=True, blank=True, default=None) 
-    datetime_of_payment = models.DateTimeField(default=timezone.now)
     # related to razorpay
     razorpay_order_id = models.CharField(max_length=500, null=True, blank=True)
     razorpay_payment_id = models.CharField(max_length=500, null=True, blank=True)
@@ -215,9 +229,13 @@ class Order(models.Model):
     
 
     def save(self, *args, **kwargs):
-        if self.order_id is None and self.datetime_of_payment and self.id:
-            self.order_id = self.datetime_of_payment.strftime('PAY2ME%Y%m%dODR') + str(self.id)
+        if self.order_id is None and self.created_at and self.id:
+            self.order_id = self.modified_at.strftime('PAY2ME%Y%m%dODR') + str(self.id)
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.user.email + " " + str(self.id)
+        return self.customer + " " + str(self.id)
+class OrderService(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
