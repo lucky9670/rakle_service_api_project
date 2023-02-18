@@ -188,8 +188,8 @@ MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-razorpay_api_key = "rzp_test_uVCG3c6N9E14UK"
-razorpay_api_secret_key = "EWN4GqNqyP2ZJSUmhQS5Yogq"
+razorpay_api_key = "rzp_test_fD7EYc9WMENlIy"
+razorpay_api_secret_key = "FxhZsBpQw3vUiSs7Qf7NKBoX"
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 base_url = 'http://127.0.0.1:8000/api/v1/'

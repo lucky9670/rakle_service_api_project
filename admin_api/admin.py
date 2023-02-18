@@ -23,5 +23,6 @@ admin.site.register(VideoConsultation)
 admin.site.register(BestOffer)
 admin.site.register(UserReview)
 admin.site.register(AddToCart)
-# admin.site.register(ProductReview)
+admin.site.register(Address)
+admin.site.register(Cart)
 

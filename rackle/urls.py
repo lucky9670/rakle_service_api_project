@@ -148,8 +148,8 @@ urlpatterns = [
     # path('api/v2/addtocart/<int:ur_id>', Delete_AddToCart.as_view(), name='addtocart-delete'),
 
     # Order or payment gateway
-    path('api/v2/payment', PaymentGateway.as_view(), name='order-service'),
-    path('api/v2/checkout', Checkout.as_view(), name='order-checkout'),
+    # path('api/v2/payment', PaymentGateway.as_view(), name='order-service'),
+    # path('api/v2/checkout', Checkout.as_view(), name='order-checkout'),
 
     path('', include('adminpanel.urls')),
     path('', include('admin_api.urls')),
