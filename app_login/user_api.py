@@ -53,7 +53,7 @@ class RegisterAPI(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response({
-            "user": ResiterSerializer(user, context=self.get_serializer_context()).data,
+            'result': 'success', "response": ResiterSerializer(user, context=self.get_serializer_context()).data,
         })
 
 class LoginAPI(GenericAPIView):

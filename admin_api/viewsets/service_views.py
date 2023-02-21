@@ -88,12 +88,35 @@ class ServiceView( viewsets.ModelViewSet):
         print(data)
         return JsonResponse({'status': 'Success', 'message': 'You have signin successfully!', 'data': data}, safe=False)
         
-        # page = self.paginate_queryset(data)
-        # if page is not None:
-        #     serializer = self.get_serializer(page, many=True)
-        #     return self.get_paginated_response(serializer.data)
-
-        # serializer = self.get_serializer(data, many=True)
-        # return Response(serializer.data)
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        instance = self.get_object()
+        try:
+            print("")
+            print("===================")
+            user = int(self.request.query_params["user"])
+        except:
+            user = None
+        if user is not None:
+            user = AllCustomer.objects.get(id=user)
+            service = Service.objects.get(id = instance.id)
+            try:
+                addtocart = AddToCart.objects.get(user=user, service=service)
+                service_quantity = addtocart.service_quantity
+            except:
+                service_quantity = 0
+            result = {
+                    'id':service.id,
+                    'main_cat_name':service.main_cat_name.id,
+                    'cat_name':service.cat_name.id,
+                    'main_service_name':service.main_service_name.id,
+                    'service_name':service.service_name,
+                    'status':service.status,
+                    'service_image':service.service_image.url,
+                    'service_charge':service.service_charge,
+                    'service_time':service.service_time,
+                    'discount':service.discount,
+                    'service_quantity':service_quantity,
+                }
+        print(result)
+        return JsonResponse({'status': 'Success', 'message': 'You have signin successfully!', 'data': result}, safe=False)
+        

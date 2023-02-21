@@ -7,8 +7,8 @@ class OrderSerializer(serializers.Serializer):
     customer = serializers.IntegerField(required = True)
     cart_detail = serializers.IntegerField(required = True)
     total_amount = serializers.FloatField(required = True)
-    delivery_date = serializers.DateField(required = True)
-    time_slot = serializers.TimeField(required = True)
+    delivery_date = serializers.CharField(required = True)
+    time_slot = serializers.CharField(required = True)
 
     # class Meta:
     #     model = Order

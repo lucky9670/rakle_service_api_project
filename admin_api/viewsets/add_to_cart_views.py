@@ -13,7 +13,6 @@ from rest_framework.decorators import action
 
 class AddToCartView(ModelViewSet):
     serializer_class = AddToCartSerializer
-    parser_classes = (MultiPartParser,)
 
     @swagger_auto_schema(tags=["Add To Cart"])
     def get_queryset(self):
@@ -54,9 +53,13 @@ class AddToCartView(ModelViewSet):
             except:
                 add_to_cart = None
             if add_to_cart is not None:
-                add_to_cart.service_quantity = data['service_quantity']
-                add_to_cart.service_amount = data['service_amount']
-                add_to_cart.save()
+                if int(data['service_quantity']) !=0:
+                    add_to_cart.service_quantity = data['service_quantity']
+                    add_to_cart.service_amount = data['service_amount']
+                    add_to_cart.save()
+                else:
+                    add_to_cart.delete()
+                    return JsonResponse({'status': 'Success', 'message': 'Service Quantity is empaty'}, safe=False)
             else:
                 add_to_cart = AddToCart.objects.create(user=user, service = service, service_amount=data['service_amount'], service_quantity=data['service_quantity'], cart=cart)
             serializer = self.get_serializer(add_to_cart)
