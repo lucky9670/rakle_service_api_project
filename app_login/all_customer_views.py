@@ -51,15 +51,20 @@ class CustomerLoginView(GenericAPIView):
             return Response({"status": True, "response": f"Phone Number does not exist"})
         print(user)
         if user.otp == otp:
-            # user = AllCustomer.objects.create(phone=phone, otp = otp)
-            # serializer = AllCustomerSerializer(phone=phone, otp=otp)
-            return Response({"status": True, "response": f"OTP Varified of {phone} number"})
+            context = {
+                "phone" : user.phone,
+                "name" : user.name,
+                "gender" : user.gender
+            }
+            # print(context)
+            return Response({'result':"Success",
+                "response": context,
+            })
         else:
             return Response({"status": False, "response": f"Invalid OTP"})
 
 class CustomerUpdateView(GenericAPIView):
     serializer_class = AllCustomerSerializer
-    # parser_classes = (MultiPartParser, )
 
     @swagger_auto_schema(tags=['Customer Login System'])
     @action(detail=False, methods=['post'])

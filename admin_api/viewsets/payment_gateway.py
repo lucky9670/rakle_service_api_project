@@ -71,7 +71,7 @@ class Checkout(ViewSet):
     serializer_class = CheckoutSerializer
    
     @swagger_auto_schema(tags=['Order'])
-    @action(detail=False, methods=["GET"])
+    @action(detail=False, methods=["POST"])
     def handlerequest(self, request, *args, **kwargs):
         payment_id = request.data['razorpay_payment_id']
         order_id = request.data['razorpay_order_id']
