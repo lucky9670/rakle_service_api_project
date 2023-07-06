@@ -1,11 +1,9 @@
 from django.contrib import admin
 from django.urls import path
-from django.urls.conf import include
+from django.urls.conf import include, re_path
 from rest_framework.routers import DefaultRouter
 from admin_api.viewsets.city_views import Delete_City
 # from app_login.user_api import LoginView, SignupView
-from django.conf.urls import url
-from rest_framework_simplejwt import views as jwt_views
 from admin_api.service_views import *
 from admin_api.viewsets.city_views import *
 from admin_api.viewsets.newviews import *
@@ -155,7 +153,7 @@ urlpatterns = [
     path('', include('admin_api.urls')),
     path('', include('app_login.urls')),
     path('swagger', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    url(r'admin/', admin.site.urls),
+    re_path(r'admin/', admin.site.urls),
     # url(r'api/', include(userapi.urls)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,9 +1,8 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from app_login.all_customer_views import CustomerView, CustomerLoginView, CustomerUpdateView
 from app_login.user_api import RegisterAPI, LoginAPI, logout
 from app_login.vender_profile import BankUpdateView, GeneralUpdateView, ImageUpdateView
 from rest_framework import routers
-from django.conf.urls import  url
 
 
 bank_update = routers.DefaultRouter()
@@ -23,7 +22,7 @@ urlpatterns = [
     path('api/Account/logout',logout.as_view(),name='logout'),
     path('api/Account/register', RegisterAPI.as_view(), name='register'),
     path('api/Account/login', LoginAPI.as_view(), name='login'),
-    url(r'^api/v1/', include(bank_update.urls)),
-    url(r'^api/v1/', include(basic_update.urls)),
-    url(r'^api/v1/', include(image_update.urls)),
+    re_path(r'^api/v1/', include(bank_update.urls)),
+    re_path(r'^api/v1/', include(basic_update.urls)),
+    re_path(r'^api/v1/', include(image_update.urls)),
 ]
