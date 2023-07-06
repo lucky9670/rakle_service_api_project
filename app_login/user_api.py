@@ -8,7 +8,6 @@ from rest_framework.decorators import action
 from .user_serializer import LoginSerializer, UserLoginSerializers, ResiterSerializer
 from django.contrib.auth.hashers import make_password
 import datetime
-from rest_framework_simplejwt import views as jwt_views
 from django.conf import settings
 from app_login.models import UserSignupModel
 from drf_yasg.utils import swagger_auto_schema

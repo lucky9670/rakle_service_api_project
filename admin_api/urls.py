@@ -1,5 +1,4 @@
-from django.urls import path, include
-from django.conf.urls import  url
+from django.urls import path, include, re_path
 from rest_framework import routers
 
 from admin_api.viewsets.main_category_view import MainCategoryView
@@ -42,15 +41,15 @@ handller.register(r'^v1', Checkout, basename='handlerequest')
 address = routers.DefaultRouter()
 address.register(r"^address", AddressView, basename="address")
 urlpatterns = [
-    url(r'^api/v1/', include(main_cat_router.urls)),
-    url(r'^api/v1/', include(cat_router.urls)),
-    url(r'^api/v1/', include(main_service_router.urls)),
-    url(r'^api/v1/', include(service_router.urls)),
-    url(r'^api/v1/', include(about_service_router.urls)),
-    url(r'^api/v1/', include(cart_router.urls)),
-    url(r'^api/v1/', include(add_to_cart_router.urls)),
-    url(r'^api/v1/', include(place_order.urls)),
-    url(r'^api/', include(handller.urls)),
-    url(r'^api/v1/', include(address.urls)),
+    re_path(r'^api/v1/', include(main_cat_router.urls)),
+    re_path(r'^api/v1/', include(cat_router.urls)),
+    re_path(r'^api/v1/', include(main_service_router.urls)),
+    re_path(r'^api/v1/', include(service_router.urls)),
+    re_path(r'^api/v1/', include(about_service_router.urls)),
+    re_path(r'^api/v1/', include(cart_router.urls)),
+    re_path(r'^api/v1/', include(add_to_cart_router.urls)),
+    re_path(r'^api/v1/', include(place_order.urls)),
+    re_path(r'^api/', include(handller.urls)),
+    re_path(r'^api/v1/', include(address.urls)),
 ]
 
