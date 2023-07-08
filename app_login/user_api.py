@@ -3,10 +3,7 @@ from rest_framework import permissions, status
 from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import action
-from .user_serializer import LoginSerializer, UserLoginSerializers, ResiterSerializer
-from django.contrib.auth.hashers import make_password
+from .user_serializer import LoginSerializer, ResiterSerializer
 import datetime
 from django.conf import settings
 from app_login.models import UserSignupModel
@@ -77,7 +74,6 @@ class LoginAPI(GenericAPIView):
             import pytz
             utc_now = datetime.datetime.now(tz=timezone.utc)
             utc_now = utc_now.replace(tzinfo=pytz.utc)
-            print("getting user data: ", userdata)
             result = {
                 'token':AuthToken.objects.create(user=userdata)[1],
                 **ResiterSerializer(userdata, context=self.get_serializer_context()).data

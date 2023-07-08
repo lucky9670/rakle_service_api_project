@@ -1,14 +1,10 @@
-from rest_framework import permissions
-from django.conf import settings
-from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from rest_framework.decorators import action
-from app_login.serials.vender_serilizer import ProfileUpdateSerializer, ProfilePictureUpdateSerializer, BasicUpdateSerializer, BankUpdateSerializer
-import random
+from app_login.serials.vender_serilizer import ProfileUpdateSerializer, ProfilePictureUpdateSerializer, BasicUpdateSerializer, BankUpdateSerializer, VenderSerializer
 from drf_yasg.utils import swagger_auto_schema
-from app_login.models import VenderProfile
+from app_login.models import VenderProfile, UserSignupModel
 from rest_framework.parsers import MultiPartParser
 from django.http import JsonResponse
+from rest_framework.response import Response
 
 class BankUpdateView(ViewSet):
     serializer_class = ProfileUpdateSerializer
@@ -16,6 +12,18 @@ class BankUpdateView(ViewSet):
     @swagger_auto_schema(tags=["Profile Update"])
     def get_queryset(self):
         return VenderProfile.objects.all()
+    
+    @swagger_auto_schema(tags=["Profile Update"])
+    def list(self,request):
+        vender =VenderProfile.objects.all()
+        serializer=VenderSerializer(vender, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(tags=["Profile Update"])
+    def retrieve(self, request, pk=None):
+        queryset = VenderProfile.objects.get(id=pk)
+        serializer=VenderSerializer(queryset)
+        return Response(serializer.data)
 
     @swagger_auto_schema(tags=["Profile Update"], request_body=BankUpdateSerializer)
     def create(self, request, *args, **kwargs):
@@ -29,7 +37,8 @@ class BankUpdateView(ViewSet):
         bank_name = data['bank_name']
         branch = data['branch']
         try:
-            profile = VenderProfile.objects.get(user=user)
+            user_data = UserSignupModel.objects.get(id=user)
+            profile = VenderProfile.objects.get(user=user_data)
         except:
             profile = None
         if profile != None:
@@ -106,5 +115,4 @@ class ImageUpdateView(ViewSet):
             profile.save()
         else:
             data = VenderProfile.objects.create(user=user, image=image)
-
         return JsonResponse({"result":"Success", "response":"Profile Updated"})

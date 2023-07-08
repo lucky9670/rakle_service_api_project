@@ -1,12 +1,6 @@
-import email
-from email.mime import image
-from pyexpat import model
-from unicodedata import name
 from django.db import models
 from lib.models import BaseModel
 from django.utils.translation import gettext_lazy as _
-# from .constants import PaymentStatus
-from django.utils import timezone
 from app_login.models import AllCustomer, CustomerDevice
 from django.db.models.deletion import DO_NOTHING
 

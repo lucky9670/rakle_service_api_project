@@ -1,14 +1,34 @@
-from rest_framework import permissions
-from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
-from app_login.serials.customer_serializer import AllCustomerSerializer, CustomerLoginSerialization, CustomerOTPSerialization, CustomerUpdateSerialization
+from app_login.serials.customer_serializer import AllCustomerSerializer, CustomerLoginSerialization, CustomerOTPSerialization, CustomerUpdateSerialization, CustomerSerializer
 import random
 from drf_yasg.utils import swagger_auto_schema
 from app_login.models import AllCustomer
-from rest_framework.parsers import MultiPartParser
 from django.http import JsonResponse
+
+class CustomerGetView(GenericAPIView):
+    serializer_class = CustomerSerializer
+
+    @swagger_auto_schema(tags=['Customer Login System'])
+    @action(detail=False, methods=['get'])
+    def get(self,request):
+        try:
+            obj=AllCustomer.objects.all()
+        except:
+            return JsonResponse({'result':'false','response':'Something went wrong, Please check.'})
+        return JsonResponse({'result':'true','customer':CustomerSerializer(obj,many=True).data},safe=False)
+
+class CustomerOneView(ViewSet):
+    serializer_class = CustomerSerializer
+    @swagger_auto_schema(tags=['Customer Login System'])
+    @action(detail=False, methods=['get'])
+    def get_customer(self,request,id):
+        service1 = AllCustomer.objects.get(id=id)
+        if not service1: 
+            return JsonResponse({'result':"false",'response':"no data present"},safe=False)
+        return JsonResponse({'result':"true",'customer':CustomerSerializer(service1).data},safe=False)
 
 class CustomerView(GenericAPIView):
     serializer_class = CustomerLoginSerialization
@@ -19,16 +39,12 @@ class CustomerView(GenericAPIView):
         data = request.data
         phone = data["phone"]
         otp = random.randint(1000, 9999)
-        print(otp)
-        # import pdb;pdb.set_trace()
         try:
             user = AllCustomer.objects.get(phone=phone)
         except:
             user = None
-        print(user)
         if user == None:
             user = AllCustomer.objects.create(phone=phone, otp = otp)
-            # serializer = AllCustomerSerializer(phone=phone, otp=otp)
             return Response({"status": True, "response": f"OTP send on {phone} number"})
         else:
             user.otp = otp
@@ -52,11 +68,11 @@ class CustomerLoginView(GenericAPIView):
         print(user)
         if user.otp == otp:
             context = {
+                "id" : user.id,
                 "phone" : user.phone,
                 "name" : user.name,
                 "gender" : user.gender
             }
-            # print(context)
             return Response({'result':"Success",
                 "response": context,
             })
@@ -73,7 +89,7 @@ class CustomerUpdateView(GenericAPIView):
             check_data = request.data
         except Exception as e:
             return JsonResponse({'result': 'fail', 'response': 'Something went wrong, Please check.'}, safe=False)
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=check_data)
         serializer.is_valid(raise_exception=True)
         plan = serializer.save()
         return Response({
