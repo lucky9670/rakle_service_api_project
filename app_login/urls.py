@@ -1,4 +1,4 @@
-from django.urls import path, include, re_path
+from django.urls import path, include, re_path, re_path
 from app_login.all_customer_views import CustomerView, CustomerLoginView, CustomerUpdateView, CustomerGetView, CustomerOneView
 from app_login.user_api import RegisterAPI, LoginAPI, logout
 from app_login.vender_profile import BankUpdateView, GeneralUpdateView, ImageUpdateView
