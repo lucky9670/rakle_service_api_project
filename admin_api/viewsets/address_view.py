@@ -1,10 +1,10 @@
-from admin_api.serialization.address_serializer import AddressSerializer
+from admin_api.serialization.address_serializer import AddressSerializer, UserAddressSerials
 from admin_api.models import Address, AllCustomer
 from rest_framework.viewsets import ModelViewSet
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import JsonResponse
+from rest_framework.decorators import action
 
 class AddressView(ModelViewSet):
     serializer_class = AddressSerializer
@@ -13,8 +13,9 @@ class AddressView(ModelViewSet):
     def get_queryset(self):
         return Address.objects.all()
 
-    @swagger_auto_schema(tags=['Address View'])
-    def list(self, request, *args, **kwargs):
+    @swagger_auto_schema(tags=['Address View'], query_serializer=UserAddressSerials)
+    @action(detail=False, methods=['GET'])
+    def user_address_list(self, request, *args, **kwargs):
         user = AllCustomer.objects.get(id=int(self.request.query_params["user"]))
         queryset = self.filter_queryset(Address.objects.filter(user = user))
 
@@ -28,17 +29,8 @@ class AddressView(ModelViewSet):
     
     @swagger_auto_schema(tags=['Address View'])
     def create(self, request, *args, **kwargs):
-        # data = request.data 
-        # longitude = data['longitude']
-        # latitude = data['latitude']
-        # appartment = data['appartment']
-        # address = data['address']
-        # flat_no = data['flat_no']
-        # save_as = data['save_as']
-        # user = data['user']
-        # address = 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return JsonResponse({'status': 'Success', 'message': 'You have successfully Registered address!'})
+        return Response(status=status.HTTP_201_CREATED, headers=headers, data=serializer.data)

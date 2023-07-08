@@ -81,10 +81,10 @@ urlpatterns = [
     path('api/v2/city/<int:city_id>',Delete_City.as_view(),name='delete_city'),
 
     # City
-    path('api/v2/customer', CustomerView.as_view(), name='customer-get'),
-    path('api/v2/customer', CustomerView.as_view(), name='customer-post'),
-    path('api/v2/customer', CustomerView.as_view(), name='customer-put'),
-    path('api/v2/customer/<int:c_id>',Delete_Customer.as_view(),name='delete_customer'),
+    # path('api/v2/customer', CustomerView.as_view(), name='customer-get'),
+    # path('api/v2/customer', CustomerView.as_view(), name='customer-post'),
+    # path('api/v2/customer', CustomerView.as_view(), name='customer-put'),
+    # path('api/v2/customer/<int:c_id>',Delete_Customer.as_view(),name='delete_customer'),
 
     # bast offer
     path('api/v2/best_offer', OfferView.as_view(), name='offer-get'),

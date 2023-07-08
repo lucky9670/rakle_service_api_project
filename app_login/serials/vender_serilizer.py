@@ -22,4 +22,9 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         model = VenderProfile
         fields = ["user","image"]
 
+class VenderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VenderProfile
+        fields = "__all__"
+
 

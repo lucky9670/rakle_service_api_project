@@ -1,17 +1,16 @@
 from rest_framework import serializers
-from .models import UserSignupModel
+from .models import UserSignupModel, VenderProfile
 from django.contrib.auth import authenticate
 
 class ResiterSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserSignupModel
-        # fields = "__all__
         fields = ('id','name','franchiser', 'role', 'phone', 'password')
         extra_kwargs = {'password': {'write_only': True}}
     def create(self, validated_data):
-       
-        user = UserSignupModel.objects.create_user(username=validated_data['phone'],phone=validated_data['phone'], password=validated_data['password'],name=validated_data['name'],role=validated_data['role'],  franchiser = validated_data['franchiser']
-        )
+        user = UserSignupModel.objects.create_user(username=validated_data['phone'],phone=validated_data['phone'], password=validated_data['password'],name=validated_data['name'],role=validated_data['role'],  franchiser = validated_data['franchiser'])
+        if validated_data['role'] == 3:
+            VenderProfile.objects.create(user=user)
         return user
 
 class LoginSerializer(serializers.ModelSerializer):

@@ -1,5 +1,5 @@
-from django.urls import path, include, re_path
-from app_login.all_customer_views import CustomerView, CustomerLoginView, CustomerUpdateView
+from django.urls import path, include, re_path, re_path
+from app_login.all_customer_views import CustomerView, CustomerLoginView, CustomerUpdateView, CustomerGetView, CustomerOneView
 from app_login.user_api import RegisterAPI, LoginAPI, logout
 from app_login.vender_profile import BankUpdateView, GeneralUpdateView, ImageUpdateView
 from rest_framework import routers
@@ -16,6 +16,8 @@ image_update.register(r'^image_upadate', ImageUpdateView, basename='image_upadat
 
 urlpatterns = [
     path('api/v2/customer-register', CustomerView.as_view(), name='customer-registration'),
+    path('api/v2/customer-get', CustomerGetView.as_view(), name='customer-get'),
+    path('api/v2/customer-get/<int:id>',CustomerOneView.as_view({'get':'get_customer'}),name='customer_get'),
     path('api/v2/customer-login', CustomerLoginView.as_view(), name='customer-login'),
     path('api/v2/customer-update', CustomerUpdateView.as_view(), name='customer-update'),
 
