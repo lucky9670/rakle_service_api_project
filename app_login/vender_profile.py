@@ -21,12 +21,8 @@ class BankUpdateView(ViewSet):
 
     @swagger_auto_schema(tags=["Profile Update"])
     def retrieve(self, request, pk=None):
-<<<<<<< HEAD
         user = UserSignupModel.objects.get(id=pk)
         queryset = VenderProfile.objects.get(user=user)
-=======
-        queryset = VenderProfile.objects.get(id=pk)
->>>>>>> 4e83d0303469abb93f839bef45bf0354a54a2ca8
         serializer=VenderSerializer(queryset)
         return Response(serializer.data)
 
