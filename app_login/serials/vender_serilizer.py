@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from app_login.models import VenderProfile
+from app_login.user_serializer import ResiterSerializer
 
 
 class BankUpdateSerializer(serializers.ModelSerializer):
@@ -23,6 +24,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         fields = ["user","image"]
 
 class VenderSerializer(serializers.ModelSerializer):
+    user = ResiterSerializer(read_only = True)
     class Meta:
         model = VenderProfile
         fields = "__all__"
