@@ -10,7 +10,11 @@ class AllCustomerSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
     name = serializers.CharField(required=False)
     gender = serializers.CharField(required=False)
-    image = serializers.ImageField(required=False)
+    email = serializers.CharField(required=False)
+
+class CustomerImageSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
+    image = serializers.ImageField(required=True)
 
 class CustomerUpdateSerialization(serializers.Serializer):
     # phone = serializers.CharField(required=True)

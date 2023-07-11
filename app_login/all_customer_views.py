@@ -2,11 +2,12 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
-from app_login.serials.customer_serializer import AllCustomerSerializer, CustomerLoginSerialization, CustomerOTPSerialization, CustomerUpdateSerialization, CustomerSerializer
+from app_login.serials.customer_serializer import AllCustomerSerializer, CustomerLoginSerialization, CustomerOTPSerialization, CustomerImageSerializer, CustomerSerializer
 import random
 from drf_yasg.utils import swagger_auto_schema
 from app_login.models import AllCustomer
 from django.http import JsonResponse
+from rest_framework.parsers import MultiPartParser
 
 class CustomerGetView(GenericAPIView):
     serializer_class = CustomerSerializer
@@ -89,10 +90,26 @@ class CustomerUpdateView(GenericAPIView):
             check_data = request.data
         except Exception as e:
             return JsonResponse({'result': 'fail', 'response': 'Something went wrong, Please check.'}, safe=False)
-        serializer = self.get_serializer(data=check_data)
-        serializer.is_valid(raise_exception=True)
-        plan = serializer.save()
-        return Response({
-            "Cat": CustomerUpdateSerialization(plan, context=self.get_serializer_context()).data,
-        })
-    
+        print(check_data)
+        user = AllCustomer.objects.get(id=check_data['id'])
+        user.name = check_data['name']
+        user.gender = check_data['gender']
+        user.email = check_data['email']
+        user.save()
+        return JsonResponse({'result':"true",'customer':CustomerSerializer(user).data},safe=False)
+
+class CustomerImageUpdateView(GenericAPIView):
+    serializer_class = CustomerImageSerializer
+    parser_classes = (MultiPartParser, )
+
+    @swagger_auto_schema(tags=['Customer Login System'])
+    @action(detail=False, methods=['post'])
+    def post(self, request, *args, **kwargs):
+        try:
+            check_data = request.data
+        except Exception as e:
+            return JsonResponse({'result': 'fail', 'response': 'Something went wrong, Please check.'}, safe=False)
+        user = AllCustomer.objects.get(id=check_data['id'])
+        user.image = check_data['image']
+        user.save()
+        return JsonResponse({'result':"true",'customer':CustomerSerializer(user).data},safe=False)

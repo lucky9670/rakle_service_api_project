@@ -10,6 +10,7 @@ from admin_api.viewsets.add_to_cart_views import AddToCartView
 from admin_api.viewsets.payment_gateway import PaymentGateway, Checkout
 from admin_api.viewsets.cart_view import CartView
 from admin_api.viewsets.address_view import AddressView
+from admin_api.viewsets.get_order_basis_of_user import CustomerOrderGetView
 
 main_cat_router = routers.DefaultRouter()
 main_cat_router.register(r'^main-category', MainCategoryView, basename='main-category')
@@ -51,5 +52,6 @@ urlpatterns = [
     re_path(r'^api/v1/', include(place_order.urls)),
     re_path(r'^api/', include(handller.urls)),
     re_path(r'^api/v1/', include(address.urls)),
+    path('api/v1/customer_order/<int:id>/', CustomerOrderGetView.as_view({'get': 'get'}), name='customer_order-detail'),
 ]
 
