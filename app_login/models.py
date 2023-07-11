@@ -84,6 +84,7 @@ class AllCustomer(AbstractBaseUser):
     phone = models.CharField(unique=True, max_length=15)
     name = models.CharField(max_length=250, default='')
     gender = models.CharField(max_length=10, default='')
+    email = models.CharField(max_length=50, default='')
     image = models.ImageField(upload_to="customer", blank=False, null=False)
     otp = models.CharField(max_length=30)
 

@@ -1,119 +1,48 @@
 {% extends 'main.html' %} {% load static %} {% block title %}Adminty - Premium Admin Template by Colorlib
 {% endblock title %} {% block script %}
-<!-- <script type="text/javascript">
-    $(document).ready(function() {
-        BindStudents();
-        // BindStudents();
-    });
-
-    
-    function BindStudents() {
-        $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: "https://rakle-services-api.herokuapp.com/api/v2/main_cat/",
-            success: function(result) {
-                    $('#maincat').append(result);
-                    console.log(response)
-                
-                // var empdata = result.length;
-                // var structureDiv = "";
-                // for (let i = 0; i < totalCount; i++) {
-                //     structureDiv += "<tr>" +
-                //         "              <td scope='row'>" + result[i].id + "</td>" +
-                //         "              <td>" + result[i].main_cat_name + "</td>" +
-                //         "              <td> <img src=" + result[i].main_cat_image + " class='img-radius' height='50px' width='50px' alt='User-Profile-Image'> </td>" +
-                //         "              <td>" + result[i].status + "</td>" +
-                //         "              <td>" + result[i].created_at + "</td>" +
-                //         "              <td><a href='#' data-toggle='modal' data-target='#exampleModalCenter " + result[i].id > +"<i class='fa fa-edit' aria-hidden='true' ></i></a> || <a href='category/delete/" + result[i].id + "'><i class='fa fa-trash-o'></i></a></td>" +
-                //         "</tr>";
-
-                // }
-
-                //$("#maincat").html(structureDiv);
-
-            },
-            error : function(xhr,errmsg,err) {
-                    alert(xhr.status + ": " + xhr.responseText);
-                }
-        });
-
-    }
-
-
-
-    var formData = new FormData();
-
-    $(document).on('click', '#submit', function(e) {
-        formData.append('cat_name', $('#cat_name').val())
-        formData.append('cat_img', $('#cat_img')[0].files[0])
-        formData.append('action', '/')
-        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
-        $.ajax({
-            type: 'POST',
-            url: '{% url "catagory" %}',
-            data: formData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            enctype: 'multipart/form-data',
-            success: function() {
-                alert('The post has been created!');
-                BindStudents();
-
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(xhr.status + ":" + xhr.responseText)
-            }
-        })
-    })
-</script> -->
-
 <script>
-
-$(document).ready(function() {
-        BindStudents();
-    });
-
-    
-    function BindStudents() {
-        // debugger;
-        $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: "http://127.0.0.1:8000/api/v1/main-category/",
-            success: function(result) {
-                    console.log(result.results)
-                
-                let empdata = result.results.length;
-                let structureDiv = "";
-                $('#maincat').html("");
-                for (let i = 0; i < empdata; i++) {
-                     structureDiv = `<tr>
-                                            <th scope="row">${ result.results[i].id }</th>
-                                            <td>${result.results[i].main_cat_name}</td>
-                                            <td><img src="${result.results[i].main_cat_image}" class="img-radius" height="50px"
-                                                    width="50px" alt="User-Profile-Image"></td>
-                                            <td>${result.results[i].status}</td>
-                                            <td>${result.results[i].created_at}</td>
-                                            <td>
-
-                                                <a href="category/edit/${result.results[i].id}"><i class="fa fa-edit"
-                                                        aria-hidden="true"></i></a> ||
-                                                <a data-toggle="modal" data-target="#delete-modal" data-catid="${result.results[i].id}"><i
-                                                        class="fa fa-trash-o"></i></a>
-                                            </td>
-
-                                        </tr>`
-                        $('#maincat').append(structureDiv);
-                }
-            },
-            error : function(xhr,errmsg,err) {
-                    alert(xhr.status + ": " + xhr.responseText);
-                }
+    $(document).ready(function() {
+            BindStudents();
         });
 
-    }
+        function BindStudents() {
+            // debugger;
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: "api/v1/main-category/",
+                success: function(result) {
+                        console.log(result.results)
+                    
+                    let empdata = result.results.length;
+                    let structureDiv = "";
+                    $('#maincat').html("");
+                    for (let i = 0; i < empdata; i++) {
+                        structureDiv = `<tr>
+                                                <th scope="row">${ result.results[i].id }</th>
+                                                <td>${result.results[i].main_cat_name}</td>
+                                                <td><img src="${result.results[i].main_cat_image}" class="img-radius" height="50px"
+                                                        width="50px" alt="User-Profile-Image"></td>
+                                                <td>${result.results[i].status}</td>
+                                                <td>${result.results[i].created_at}</td>
+                                                <td>
+
+                                                    <a href="category/edit/${result.results[i].id}"><i class="fa fa-edit"
+                                                            aria-hidden="true"></i></a> ||
+                                                    <a data-toggle="modal" data-target="#delete-modal" data-catid="${result.results[i].id}"><i
+                                                            class="fa fa-trash-o"></i></a>
+                                                </td>
+
+                                            </tr>`
+                            $('#maincat').append(structureDiv);
+                    }
+                },
+                error : function(xhr,errmsg,err) {
+                        alert(xhr.status + ": " + xhr.responseText);
+                    }
+            });
+
+        }
 
 /// add catagory
     function resetForm() 
@@ -131,7 +60,7 @@ $(document).ready(function() {
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
         $.ajax({
             type: 'POST',
-            url: "http://127.0.0.1:8000/api/v1/main-category/",
+            url: "api/v1/main-category/",
             data: formData,
             cache: false,
             processData: false,
@@ -163,7 +92,7 @@ $(document).ready(function() {
     
         $.ajax({
             type: 'DELETE',
-            url: `http://127.0.0.1:8000/api/v1/main-category/${imageId}/`,
+            url: `api/v1/main-category/${imageId}/`,
             success: function (rsp) {
                 // debugger;
                 $("#delete-modal").modal('hide');
