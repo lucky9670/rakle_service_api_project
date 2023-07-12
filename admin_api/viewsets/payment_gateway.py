@@ -44,7 +44,7 @@ class PaymentGateway(ViewSet):
         # except:
         #     address = Address.objects.create()
         # for service, service_quantity in zip(services, service_quantities):
-        order = Order.objects.create(address = address, customer = customer, services = cart_detail, delivery_date= delivery_date, time_slot=time_slot, total_amount=0, payment_status=3, delevery_status=1)
+        order = Order.objects.create(address = address, customer = customer, cart_detail = cart_detail, delivery_date= delivery_date, time_slot=time_slot, total_amount=0, payment_status=3, delevery_status=1)
         razorpay_order = client.order.create({"amount": total_amount*100, "currency": "INR", "payment_capture": 1})
         callback_url = 'http://'+ str(get_current_site(request))+"/api/v1/handlerequest/"
         # user = AllCustomer.objects.get(id= int(customer))
