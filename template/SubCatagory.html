@@ -14,7 +14,7 @@ $(document).ready(function() {
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: "http://127.0.0.1:8000/api/v1/category/",
+            url: "api/v1/category/",
             success: function(result) {
                     console.log(result.results)
                 
@@ -23,23 +23,23 @@ $(document).ready(function() {
                 $('#category').html("");
                 for (let i = 0; i < empdata; i++) {
                      structureDiv = `<tr>
-                                            <th scope="row">${i+1}</th>
-                                            <td>${result.results[i].main_cat_name}</td>
-                                            <td>${result.results[i].cat_name}</td>
-                                            <td><img src="${result.results[i].cat_image}" class="img-radius" height="50px"
-                                                    width="50px" alt="User-Profile-Image"></td>
-                                            <td>${result.results[i].status}</td>
-                                            <td>${result.results[i].created_at}</td>
-                                            <td>
+                            <th scope="row">${i+1}</th>
+                            <td>${result.results[i].main_cat_name}</td>
+                            <td>${result.results[i].cat_name}</td>
+                            <td><img src="${result.results[i].cat_image}" class="img-radius" height="50px"
+                                    width="50px" alt="User-Profile-Image"></td>
+                            <td>${result.results[i].status}</td>
+                            <td>${result.results[i].created_at}</td>
+                            <td>
 
-                                                <a href="category/edit/${result.results[i].id}"><i class="fa fa-edit"
-                                                        aria-hidden="true"></i></a> ||
-                                                <a data-toggle="modal" data-target="#delete-modal" data-catid="${result.results[i].id}"><i
-                                                        class="fa fa-trash-o"></i></a>
-                                            </td>
+                                <a href="category/edit/${result.results[i].id}"><i class="fa fa-edit"
+                                        aria-hidden="true"></i></a> ||
+                                <a data-toggle="modal" data-target="#delete-modal" data-catid="${result.results[i].id}"><i
+                                        class="fa fa-trash-o"></i></a>
+                            </td>
 
-                                        </tr>`
-                        $('#category').append(structureDiv);
+                        </tr>`
+                    $('#category').append(structureDiv);
                 }
             },
             error : function(xhr,errmsg,err) {
@@ -66,7 +66,7 @@ $(document).ready(function() {
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
         $.ajax({
             type: 'POST',
-            url: "http://127.0.0.1:8000/api/v1/category/",
+            url: "api/v1/category/",
             data: formData,
             cache: false,
             processData: false,
@@ -98,7 +98,7 @@ $(document).ready(function() {
     
         $.ajax({
             type: 'DELETE',
-            url: `http://127.0.0.1:8000/api/v1/category/${imageId}/`,
+            url: `api/v1/category/${imageId}/`,
             success: function (rsp) {
                 // debugger;
                 $("#delete-modal").modal('hide');

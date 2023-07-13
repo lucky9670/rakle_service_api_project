@@ -1,7 +1,7 @@
 from django.db import models
 from lib.models import BaseModel
 from django.utils.translation import gettext_lazy as _
-from app_login.models import AllCustomer, CustomerDevice
+from app_login.models import AllCustomer, CustomerDevice, UserSignupModel
 from django.db.models.deletion import DO_NOTHING
 
 # Create your models here.
@@ -227,9 +227,19 @@ class Order(BaseModel):
             self.order_id = self.modified_at.strftime('PAY2ME%Y%m%dODR') + str(self.id)
         return super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.customer + " " + str(self.id)
 class OrderService(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
+
+class OrderAcceptance(models.Model):
+    ordder_acceptance = (
+        (1, 'Accepted'),
+        (2, 'Pending'),
+        (3, 'Rejected')
+    )
+    vender = models.ForeignKey(UserSignupModel, on_delete=models.SET_NULL, null=True, blank=True)
+    customer = models.ForeignKey(AllCustomer, on_delete=models.DO_NOTHING)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(editable=False, auto_now_add=True)
+    oredr_status = models.IntegerField(choices = ordder_acceptance, default=2)
