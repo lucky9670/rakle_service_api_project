@@ -25,4 +25,6 @@ admin.site.register(UserReview)
 admin.site.register(AddToCart)
 admin.site.register(Address)
 admin.site.register(Cart)
+admin.site.register(OrderAcceptance)
+admin.site.register(Order)
 

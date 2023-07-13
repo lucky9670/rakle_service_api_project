@@ -11,6 +11,8 @@ from admin_api.viewsets.payment_gateway import PaymentGateway, Checkout
 from admin_api.viewsets.cart_view import CartView
 from admin_api.viewsets.address_view import AddressView
 from admin_api.viewsets.get_order_basis_of_user import CustomerOrderGetView
+from admin_api.viewsets.created_order import CreatedOrderView, OrderGetView
+from admin_api.viewsets.order_accept_view import OrderAcceptanceAPiView
 
 main_cat_router = routers.DefaultRouter()
 main_cat_router.register(r'^main-category', MainCategoryView, basename='main-category')
@@ -41,6 +43,10 @@ handller.register(r'^v1', Checkout, basename='handlerequest')
 
 address = routers.DefaultRouter()
 address.register(r"^address", AddressView, basename="address")
+
+get_order = routers.DefaultRouter()
+get_order.register(r'^get_order', CreatedOrderView)
+
 urlpatterns = [
     re_path(r'^api/v1/', include(main_cat_router.urls)),
     re_path(r'^api/v1/', include(cat_router.urls)),
@@ -52,6 +58,10 @@ urlpatterns = [
     re_path(r'^api/v1/', include(place_order.urls)),
     re_path(r'^api/', include(handller.urls)),
     re_path(r'^api/v1/', include(address.urls)),
+    re_path(r'^api/v1/', include(get_order.urls)),
     path('api/v1/customer_order/<int:id>/', CustomerOrderGetView.as_view({'get': 'get'}), name='customer_order-detail'),
+    path('api/v1/vender_order_get/<int:id>/', OrderGetView.as_view({'get': 'get_order_basis_of_vender'}), name='get_order_basis_of_vender'),
+    path('api/v1/customer_order_get/<int:id>/', OrderGetView.as_view({'get': 'get_order_basis_of_customer'}), name='get_order_basis_of_customer'),
+    path('api/v2/order_accept', OrderAcceptanceAPiView.as_view(), name='order_accept'),
 ]
 

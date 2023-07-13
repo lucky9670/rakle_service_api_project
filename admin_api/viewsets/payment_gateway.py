@@ -1,21 +1,13 @@
-from knox.models import AuthToken
-from rest_framework.permissions import IsAdminUser
 from django.conf import settings
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.viewsets import ModelViewSet, ViewSet
+from rest_framework.viewsets import ViewSet
 from rest_framework.decorators import action
 from admin_api.serialization.work_serializer import *
 from rackle import settings
 from admin_api.models import *
-from rest_framework.generics import GenericAPIView
-from django.http import JsonResponse
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.views import APIView
-from django.utils import timezone
 from admin_api.serialization.update_serializer import *
 from admin_api.serialization.paymentserializer import *
-from rest_framework.parsers import MultiPartParser, FormParser
 import razorpay
 from django.contrib.sites.shortcuts import get_current_site
 from datetime import datetime
@@ -100,6 +92,8 @@ class Checkout(ViewSet):
                 order_db.save()
                 ser_detail.checkouted =True
                 ser_detail.save()
+                customer = AllCustomer.objects.get(customer= order_db.order_db)
+                OrderAcceptance.objects.create(customer = customer, order = order_db)
                 return Response({
                     "payment_status": "Success",
                 })
