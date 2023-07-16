@@ -159,7 +159,10 @@ class VideoConsultation(models.Model):
 class BestOffer(models.Model):
     name = models.CharField(max_length=100)
     offerimage = models.FileField(upload_to='offer',blank=False, null=False)
-    offer = models.CharField(max_length=100)
+    discount = models.CharField(max_length=100)
+    description = models.TextField()
+    validity = models.CharField(max_length=100)
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
 
 class UserReview(models.Model):
     name = models.CharField(max_length=100)

@@ -11,5 +11,4 @@ class CustomerOrderGetView(ViewSet):
             order = queryset.get(pk=id)
             serializer = CustomerOrderSerializer(order)
             return Response(serializer.data)
-
         return Response({'detail': 'Customer ID not provided.'}, status=status.HTTP_400_BAD_REQUEST)
