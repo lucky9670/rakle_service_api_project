@@ -68,8 +68,8 @@ urlpatterns = [
     # path('api/v2/service_faq/<int:ser_id>',ServiceFAQGet.as_view({'get':'get_faq_by_ser_id'}),name='service_faq_get'),
     # path('api/v2/service_faq', ServiceFAQView.as_view(),name='service_faq_post'),
 
-    # path('api/v2/slider', SliderView.as_view(), name='slider-get'),
-    # path('api/v2/slider', SliderView.as_view(), name='slider-post'),
+    path('api/v1/slider', SliderView.as_view(), name='slider-get'),
+    path('api/v1/slider', SliderView.as_view(), name='slider-post'),
 
     # path('api/v2/video_consultation', VideoConsultationView.as_view(), name='video-consult-get'),
     # path('api/v2/video_consultation', VideoConsultationView.as_view(), name='video-consult-post'),
@@ -87,8 +87,8 @@ urlpatterns = [
     # path('api/v2/customer/<int:c_id>',Delete_Customer.as_view(),name='delete_customer'),
 
     # bast offer
-    # path('api/v2/best_offer', OfferView.as_view(), name='offer-get'),
-    # path('api/v2/best_offer', OfferView.as_view(), name='offer-post'),
+    # path('api/v1/best_offer', OfferView.as_view(), name='offer-get'),
+    # path('api/v1/best_offer', OfferView.as_view(), name='offer-post'),
 
     # Book service
     # path('api/v2/book_serice', BookServiceView.as_view(), name='Book-service-get'),
