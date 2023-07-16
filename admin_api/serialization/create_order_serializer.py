@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from admin_api.models import OrderAcceptance, Order
+from admin_api.models import OrderAcceptance
 from app_login.serials.vender_serilizer import VenderSerializer
 from app_login.serials.customer_serializer import CustomerSerializer
 from admin_api.serialization.get_order_customer_serial import CustomerOrderSerializer
