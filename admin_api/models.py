@@ -246,3 +246,9 @@ class OrderAcceptance(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
     oredr_status = models.IntegerField(choices = ordder_acceptance, default=2)
+
+class WhyService(models.Model):
+    name = models.CharField(max_length=120)
+    image = models.ImageField(upload_to='why_service', blank=False, null=False)
+    description = models.TextField()
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
