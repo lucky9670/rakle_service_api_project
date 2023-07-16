@@ -12,7 +12,7 @@ from admin_api.viewsets.cart_view import CartView
 from admin_api.viewsets.address_view import AddressView
 from admin_api.viewsets.get_order_basis_of_user import CustomerOrderGetView
 from admin_api.viewsets.created_order import CreatedOrderView, OrderGetView
-from admin_api.viewsets.order_accept_view import OrderAcceptanceAPiView
+from admin_api.viewsets.order_accept_view import OrderAcceptanceAPiView, GetVenderLocationView
 from admin_api.viewsets.offer_api_view import BestOfferView
 from admin_api.viewsets.why_serice_view import WhyServiceView
 
@@ -72,6 +72,7 @@ urlpatterns = [
     path('api/v1/customer_order/<int:id>/', CustomerOrderGetView.as_view({'get': 'get'}), name='customer_order-detail'),
     path('api/v1/vender_order_get/<int:id>/', OrderGetView.as_view({'get': 'get_order_basis_of_vender'}), name='get_order_basis_of_vender'),
     path('api/v1/customer_order_get/<int:id>/', OrderGetView.as_view({'get': 'get_order_basis_of_customer'}), name='get_order_basis_of_customer'),
-    path('api/v2/order_accept', OrderAcceptanceAPiView.as_view(), name='order_accept'),
+    path('api/v1/order_accept', OrderAcceptanceAPiView.as_view(), name='order_accept'),
+    path('api/v1/vender_location/<int:id>/', GetVenderLocationView.as_view({'get': 'get_vender_location'}), name='vender_location'),
 ]
 
