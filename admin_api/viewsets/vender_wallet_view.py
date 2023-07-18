@@ -1,11 +1,10 @@
 from rest_framework.viewsets import ViewSet
-from admin_api.models import VenderWallet, Order, OrderAcceptance
+from admin_api.models import VenderWallet, Order, OrderAcceptance, FrenchiserWallet
 from admin_api.serialization.vender_wallet_serial import VenderWalletSerial, VenderWalletInputSerial
 from rest_framework.response import Response
 from rest_framework import status
-from app_login.models import VenderProfile, UserSignupModel
+from app_login.models import VenderProfile, UserSignupModel, FranchieserProfile
 from drf_yasg.utils import swagger_auto_schema
-from django.shortcuts import get_object_or_404
 
 @swagger_auto_schema(tags=['Wallet Section'])
 class VenderWalletView(ViewSet):
@@ -19,13 +18,19 @@ class VenderWalletView(ViewSet):
         amount = data['amount']
         oredr_acceptance = OrderAcceptance.objects.get(order = order_id)
         vender = UserSignupModel.objects.get(id = vender_id)
+        # franchieser = UserSignupModel.objects.get(id = vender.franchiser.id)
+        print(vender.franchiser.id)
+        franchieser_pro = FranchieserProfile.objects.get(user = vender.franchiser.id)
         vender_profile = VenderProfile.objects.get(user = vender)
-        print(request.data)
+        franchieser_total_amount = franchieser_pro.amount + amount*5/100
         total_amount = vender_profile.amount + amount*15/100
         vender_profile.amount = total_amount
         vender_profile.save()
         oredr_acceptance.oredr_status = 4
         oredr_acceptance.save()
+        franchieser_pro.amount = franchieser_total_amount
+        franchieser_pro.save()
+        FrenchiserWallet.objects.create(order=OrderAcceptance.objects.get(id = data['order']), frenshiser= UserSignupModel.objects.get(id=vender.franchiser.id), amount = data["amount"])
         serializer = VenderWalletSerial(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

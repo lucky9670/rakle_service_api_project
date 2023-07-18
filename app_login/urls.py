@@ -2,6 +2,7 @@ from django.urls import path, include, re_path, re_path
 from app_login.all_customer_views import CustomerView, CustomerLoginView, CustomerUpdateView, CustomerGetView, CustomerOneView, CustomerImageUpdateView
 from app_login.user_api import RegisterAPI, LoginAPI, logout
 from app_login.vender_profile import BankUpdateView, GeneralUpdateView, ImageUpdateView
+from app_login.frenchiser_details_views import FranchieserBankUpdateView, FranchieserGeneralUpdateView, FranchieserImageUpdateView
 from rest_framework import routers
 
 
@@ -13,6 +14,16 @@ basic_update.register(r'^basic_upadate', GeneralUpdateView, basename='basic_upad
 
 image_update = routers.DefaultRouter()
 image_update.register(r'^image_upadate', ImageUpdateView, basename='image_upadate')
+
+franchieser_bank_update = routers.DefaultRouter()
+franchieser_bank_update.register(r'^f_bank_upadate', FranchieserBankUpdateView, basename='franchieser_bank_upadate')
+
+franchieser_basic_update = routers.DefaultRouter()
+franchieser_basic_update.register(r'^f_basic_upadate', FranchieserGeneralUpdateView, basename='franchieser_basic_upadate')
+
+franchieser_image_update = routers.DefaultRouter()
+franchieser_image_update.register(r'^f_image_upadate', FranchieserImageUpdateView, basename='franchieser_image_upadate')
+
 
 urlpatterns = [
     path('api/v2/customer-register', CustomerView.as_view(), name='customer-registration'),
@@ -28,4 +39,7 @@ urlpatterns = [
     re_path(r'^api/v1/', include(bank_update.urls)),
     re_path(r'^api/v1/', include(basic_update.urls)),
     re_path(r'^api/v1/', include(image_update.urls)),
+    re_path(r'^api/v1/', include(franchieser_bank_update.urls)),
+    re_path(r'^api/v1/', include(franchieser_basic_update.urls)),
+    re_path(r'^api/v1/', include(franchieser_image_update.urls)),
 ]

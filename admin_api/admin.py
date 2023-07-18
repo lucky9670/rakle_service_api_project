@@ -28,4 +28,7 @@ admin.site.register(Cart)
 admin.site.register(OrderAcceptance)
 admin.site.register(Order)
 admin.site.register(VenderWallet)
+admin.site.register(VendorRequestMoney)
+admin.site.register(VendorCallSupport)
+admin.site.register(FrenchiserWallet)
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserSignupModel, VenderProfile
+from .models import UserSignupModel, VenderProfile, FranchieserProfile
 from django.contrib.auth import authenticate
 
 class ResiterSerializer(serializers.ModelSerializer):
@@ -11,6 +11,8 @@ class ResiterSerializer(serializers.ModelSerializer):
         user = UserSignupModel.objects.create_user(username=validated_data['phone'],phone=validated_data['phone'], password=validated_data['password'],name=validated_data['name'],role=validated_data['role'],  franchiser = validated_data['franchiser'])
         if validated_data['role'] == 3:
             VenderProfile.objects.create(user=user)
+        if validated_data['role'] == 2:
+            FranchieserProfile.objects.create(user=user)
         return user
 
 class LoginSerializer(serializers.ModelSerializer):

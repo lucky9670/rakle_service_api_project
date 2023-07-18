@@ -258,4 +258,29 @@ class VenderWallet(models.Model):
     order = models.ForeignKey(OrderAcceptance, on_delete=models.CASCADE,unique=True)
     vender = models.ForeignKey(UserSignupModel, on_delete=models.CASCADE)
     amount = models.FloatField()
+    
+
+class VendorRequestMoney(models.Model):
+    amount = models.FloatField()
+    notes = models.TextField(null=True,blank=True)
+    vendor = models.ForeignKey(UserSignupModel, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+    created_at = models.DateTimeField(editable=False, auto_now_add=True)
+
+
+class VendorCallSupport(models.Model):
+    
+    remark = models.TextField(null=True,blank=True)
+    vendor = models.ForeignKey(UserSignupModel, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+    created_at = models.DateTimeField(editable=False, auto_now_add=True)
+
+
+class FrenchiserWallet(models.Model):
+    order = models.ForeignKey(OrderAcceptance, on_delete=models.CASCADE,unique=True)
+    frenshiser = models.ForeignKey(UserSignupModel, on_delete=models.CASCADE)
+    amount = models.FloatField()
+
+    
+
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserSignupModel, AllCustomer, CustomerDevice, VenderProfile
+from .models import UserSignupModel, AllCustomer, CustomerDevice, VenderProfile, FranchieserProfile
 # Register your models here.
 
 # @admin.register(UserSignupModel)
@@ -8,6 +8,8 @@ from .models import UserSignupModel, AllCustomer, CustomerDevice, VenderProfile
 admin.site.register(UserSignupModel)
 admin.site.register(CustomerDevice)
 admin.site.register(VenderProfile)
+admin.site.register(FranchieserProfile)
+
 @admin.register(AllCustomer)
 class UserAdmin(admin.ModelAdmin):
     list_display = ["id", 'phone','password', 'otp', 'name']
