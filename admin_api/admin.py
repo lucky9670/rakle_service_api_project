@@ -27,4 +27,5 @@ admin.site.register(Address)
 admin.site.register(Cart)
 admin.site.register(OrderAcceptance)
 admin.site.register(Order)
+admin.site.register(VenderWallet)
 

@@ -126,7 +126,7 @@ class VenderProfile(BaseModel):
     status = models.BooleanField(default=True)
     notification_id = models.CharField(max_length=100 ,blank=True, null=True)
     email = models.CharField(max_length=254 ,blank=True, null=True)
-    amount = models.CharField(max_length=254 ,blank=True, null=True)
+    amount = models.FloatField(default=0)
     no_of_vender = models.IntegerField(blank=True, null=True)
 
 # class FranchieserProfile(BaseModel):

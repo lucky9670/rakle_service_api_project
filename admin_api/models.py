@@ -239,7 +239,8 @@ class OrderAcceptance(models.Model):
     ordder_acceptance = (
         (1, 'Accepted'),
         (2, 'Pending'),
-        (3, 'Rejected')
+        (3, 'Rejected'),
+        (4, 'Completed')
     )
     vender = models.ForeignKey(UserSignupModel, on_delete=models.SET_NULL, null=True, blank=True)
     customer = models.ForeignKey(AllCustomer, on_delete=models.DO_NOTHING)
@@ -252,3 +253,9 @@ class WhyService(models.Model):
     image = models.ImageField(upload_to='why_service', blank=False, null=False)
     description = models.TextField()
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
+
+class VenderWallet(models.Model):
+    order = models.ForeignKey(OrderAcceptance, on_delete=models.CASCADE,unique=True)
+    vender = models.ForeignKey(UserSignupModel, on_delete=models.CASCADE)
+    amount = models.FloatField()
+
