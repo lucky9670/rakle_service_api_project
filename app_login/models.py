@@ -65,6 +65,7 @@ class UserSignupModel(AbstractUser):
     # username = models.CharField(max_length=15, unique=True)
     franchiser = models.ForeignKey("self",related_name="parent",on_delete=DO_NOTHING,null=True,blank=True)
     role =  models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True, default=3)
+    otp = models.CharField(max_length=30, default='')
 
     objects_original = UserManager()
     def __str__(self):

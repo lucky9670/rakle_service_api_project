@@ -3,7 +3,7 @@ from rest_framework import permissions, status
 from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-from .user_serializer import LoginSerializer, ResiterSerializer
+from .user_serializer import LoginSerializer, ResiterSerializer, ChangePasswordSerial, ForgetPasswordSerial, ResetPasswordSerial
 import datetime
 from django.conf import settings
 from app_login.models import UserSignupModel
@@ -11,6 +11,7 @@ from drf_yasg.utils import swagger_auto_schema
 from django.http import JsonResponse
 from datetime import timezone
 from knox.auth import TokenAuthentication
+import random
 
 def password_check(passwd):
     flag = 0
@@ -95,37 +96,165 @@ class logout(GenericAPIView):
         return Response({'result': 'true', 'response': 'logged out successfully'},status=status.HTTP_200_OK)
 
 
-# class LoginView(ModelViewSet):
-#     serializer_class = UserLoginSerializers
-#     permission_classes = (permissions.AllowAny,)
+class ChangePassword(GenericAPIView):
+    serializer_class = ChangePasswordSerial
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
-#     @action(detail=False, methods=['post'])
-#     def login(self, request, *args, **kwargs):
-#         serializer = UserLoginSerializers(data=request.data, context={'request': request})
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         return Response({
-#             "user": LoginSerializer(user).data,
-#             "token_jwt": jwt_views.TokenObtainPairView(),
-#             # "token_knox": AuthToken.objects.create(user)[1]
-#         })
+    @swagger_auto_schema(tags=['Authentication'])
+    def post(self, request):
+        message = {'result': '', 'response': ''}
+        info = request.data
+        try:
+            email = request.user.phone
+        except Exception as e:
+            message['result'] = 'false'
+            message['response'] = 'Email not sent please check '
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        try:
+            currentpassword = info['currentpassword']
+        except Exception as e:
+            message['result'] = 'false'
+            message['response'] = 'currentpassword  not sent please check '
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        try:
+            password = info['new_password']
+        except Exception as e:
+            message['result'] = 'false'
+            message['response'] = 'password not sent please check '
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        try:
+            confirmpassword = info['confirmpassword']
+        except Exception as e:
+            message['result'] = 'false'
+            message['response'] = 'confirmpassword not sent please check '
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
 
-# class SignupView(ModelViewSet):
-#     serializer_class = LoginSerializer
-#     permission_classes = (permissions.AllowAny,)
+        if not email:
+            message = {'result': 'false', 'response': 'enter valid email data'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
 
-#     @action(detail=False, methods=['post'])
-#     def signup(self, request):
-#         data = request.data.copy()
-#         data["password"] = make_password(data["password"])
-#         data["email"] = data["email"].lower()
-#         serializer = LoginSerializer(data=data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.save()
-#         return Response({
-#             "user": LoginSerializer(user).data,
-#             "token_jwt": jwt_views.TokenObtainPairView(),
-#             # "token_knox": AuthToken.objects.create(user)[1]
-#         })
-    
-    
+        if not currentpassword:
+            message = {'result': 'false', 'response': 'enter valid current password'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        if not password:
+            message = {'result': 'false', 'response': 'enter valid password data'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        if not confirmpassword:
+            message = {'result': 'false', 'response': 'enter valid confirmpassword data'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        if len(password) < 4:
+            message = {'result': 'false', 'response': 'enter password of minimun 4 digits'}
+            return JsonResponse(message, safe=False)
+
+        check_password = password
+        checkpoint = password_check(check_password)
+        if checkpoint == 1:
+            return JsonResponse({'result': 'fail', 'response': 'Password must contain atleast one capital alphbat'}, safe=False)
+        if checkpoint == 2:
+            return JsonResponse({'result': 'fail', 'response': 'Password must contain atleast one digit'}, safe=False)
+        if checkpoint == 3:
+            return JsonResponse({'result': 'fail', 'response': 'Password must contains one special character like @, $,#,&'}, safe=False)
+
+        if password != confirmpassword:
+            message = {'result': 'false', 'response': 'password and confirmpassword doesnot match'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        userobj = UserSignupModel.objects.filter(phone=email).count()
+        if userobj == 0:
+            message = {'result': 'false', 'response': 'Either Email or password doesnot match'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        try:
+            userdata = UserSignupModel.objects.get(phone=email)
+            if userdata.check_password(password):
+                message = {'result': 'false', 'response': 'new password already exists'}
+                return Response(message,status=status.HTTP_400_BAD_REQUEST)
+            if userdata.check_password(currentpassword):
+                userdata.set_password(password)
+                userdata.save()                
+            else:
+                message = {'result': 'false', 'response': 'wrong current password'}
+                return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            message = {'result': 'false', 'response': 'something went wrong'}
+            return Response(message,status=status.HTTP_400_BAD_REQUEST)
+        result = AuthToken.objects.filter(user=userdata).delete()
+        message = {'result': 'true', 'response': 'successfull changed password'}
+        return Response(message,status=status.HTTP_200_OK)
+
+class Forgetpassword(GenericAPIView):
+    serializer_class = ForgetPasswordSerial
+
+    @swagger_auto_schema(tags=['Authentication'])
+    def post(self, request):
+        info = request.data
+        try:
+            email = info['phone']
+        except Exception as e:
+            return JsonResponse({'result': 'false', 'response': 'Phone not provided','code':status.HTTP_422_UNPROCESSABLE_ENTITY}, safe=False,status=422)
+
+        if not email:
+            return JsonResponse({'result': 'false', 'response': 'enter valid data'}, safe=False)
+
+        userobj = UserSignupModel.objects.filter(phone=email).count()
+        if userobj == 0:
+            return JsonResponse({'result': 'false', 'response': 'Phone does not exist', 'message': 'Given email is invalid please enter valid Phone', 'code': status.HTTP_400_BAD_REQUEST}, safe=False,status=400)
+        user = UserSignupModel.objects.get(phone=email)
+        otp = random.randint(1000, 9999)
+        user.otp = otp
+        user.save()
+        return JsonResponse({'result': 'true', 'response': f'Validate it from your OTP sent on your phone {otp}'}, safe=False)
+
+
+
+class ResetPassword(GenericAPIView):
+    serializer_class = ResetPasswordSerial
+
+    @swagger_auto_schema(tags=['Authentication'])
+    def post(self, request):
+
+        message = {'result': '', 'response': ''}
+        info = request.data
+
+        try:
+            password = info['new_password']
+            conf_password = info['confirm_password']
+            phone = info['phone']
+            otp = info['otp']
+        except Exception as e:
+            message['result'] = 'false'
+            message['response'] = 'confirm_password or password  not sent please check '
+            return JsonResponse(message, safe=False,status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+        if not password:
+            message = {'result': 'false', 'response': 'enter valid password data'}
+            return JsonResponse(message, safe=False,status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        if not conf_password:
+            message = {'result': 'false', 'response': 'enter valid password data'}
+            return JsonResponse(message, safe=False,status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        if len(password) < 4:
+            message = {'result': 'false', 'response': 'enter password of minimun 4 digits'}
+            return JsonResponse(message, safe=False,status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        check_password = password
+        checkpoint = password_check(check_password)
+        if checkpoint == 1:
+            return JsonResponse({'result': 'fail', 'response': 'Password must contain atleast one capital alphbat'}, safe=False,status=status.HTTP_400_BAD_REQUEST)
+        if checkpoint == 2:
+            return JsonResponse({'result': 'fail', 'response': 'Password must contain atleast one digit'}, safe=False,status=status.HTTP_400_BAD_REQUEST)
+        if checkpoint == 3:
+            return JsonResponse({'result': 'fail', 'response': 'Password must contains one special character like @, $,#,&'}, safe=False,status=status.HTTP_400_BAD_REQUEST)
+        if password != conf_password:
+            message = {'result': 'false', 'response': 'password doesnot match'}
+            return JsonResponse(message, safe=False,status=status.HTTP_400_BAD_REQUEST)
+        try:
+            userdata = UserSignupModel.objects.get(phone=phone)
+            if userdata.otp == otp:
+                userdata.set_password(password)
+                userdata.save()
+                message = {'result': 'true', 'response': 'successfull reseted password'}
+                return JsonResponse(message, safe=False)
+            else:
+                message = {'result': 'false', 'response': 'OTP is invalid'}
+                return JsonResponse(message, safe=False,status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            message = {'result': 'false', 'response': 'something went wrong'}
+            return JsonResponse(message, safe=False,status=status.HTTP_500_INTERNAL_SERVER_ERROR)

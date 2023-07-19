@@ -16,6 +16,7 @@ from admin_api.viewsets.order_accept_view import OrderAcceptanceAPiView, GetVend
 from admin_api.viewsets.offer_api_view import BestOfferView
 from admin_api.viewsets.why_serice_view import WhyServiceView
 from admin_api.viewsets.vender_wallet_view import VenderWalletView
+from admin_api.viewsets.call_support_view import VenderCallSupportView
 
 main_cat_router = routers.DefaultRouter()
 main_cat_router.register(r'^main-category', MainCategoryView, basename='main-category')
@@ -59,6 +60,9 @@ why_service.register(r'^why_service', WhyServiceView, basename="why_service")
 vender_wallet = routers.DefaultRouter()
 vender_wallet.register(r'^vender_wallet', VenderWalletView, basename="vender_wallet")
 
+vender_call_support = routers.DefaultRouter()
+vender_call_support.register(r'^vender_call_support', VenderCallSupportView, basename="vender_call_support")
+
 urlpatterns = [
     re_path(r'^api/v1/', include(main_cat_router.urls)),
     re_path(r'^api/v1/', include(cat_router.urls)),
@@ -74,6 +78,7 @@ urlpatterns = [
     re_path(r'^api/v1/', include(get_offer.urls)),
     re_path(r'^api/v1/', include(why_service.urls)),
     re_path(r'^api/v1/', include(vender_wallet.urls)),
+    re_path(r'^api/v1/', include(vender_call_support.urls)),
     path('api/v1/customer_order/<int:id>/', CustomerOrderGetView.as_view({'get': 'get'}), name='customer_order-detail'),
     path('api/v1/vender_order_get/<int:id>/', OrderGetView.as_view({'get': 'get_order_basis_of_vender'}), name='get_order_basis_of_vender'),
     path('api/v1/customer_order_get/<int:id>/', OrderGetView.as_view({'get': 'get_order_basis_of_customer'}), name='get_order_basis_of_customer'),

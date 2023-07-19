@@ -268,6 +268,14 @@ class VendorRequestMoney(models.Model):
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
 
 
+class FranchieserRequestMoney(models.Model):
+    amount = models.FloatField()
+    notes = models.TextField(null=True,blank=True)
+    franchiser = models.ForeignKey(UserSignupModel, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
+    created_at = models.DateTimeField(editable=False, auto_now_add=True)
+
+
 class VendorCallSupport(models.Model):
     
     remark = models.TextField(null=True,blank=True)

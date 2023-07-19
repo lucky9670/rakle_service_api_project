@@ -1,10 +1,10 @@
 from django.urls import path, include, re_path, re_path
 from app_login.all_customer_views import CustomerView, CustomerLoginView, CustomerUpdateView, CustomerGetView, CustomerOneView, CustomerImageUpdateView
-from app_login.user_api import RegisterAPI, LoginAPI, logout
+from app_login.user_api import RegisterAPI, LoginAPI, logout, ChangePassword, Forgetpassword, ResetPassword
 from app_login.vender_profile import BankUpdateView, GeneralUpdateView, ImageUpdateView
 from app_login.frenchiser_details_views import FranchieserBankUpdateView, FranchieserGeneralUpdateView, FranchieserImageUpdateView
 from rest_framework import routers
-
+from app_login.viewsets.request_money_viewsets import VenderRequestMoneyViews, FanchaiserRequestMoneyViews
 
 bank_update = routers.DefaultRouter()
 bank_update.register(r'^bank_upadate', BankUpdateView, basename='bank_upadate')
@@ -24,6 +24,12 @@ franchieser_basic_update.register(r'^f_basic_upadate', FranchieserGeneralUpdateV
 franchieser_image_update = routers.DefaultRouter()
 franchieser_image_update.register(r'^f_image_upadate', FranchieserImageUpdateView, basename='franchieser_image_upadate')
 
+vender_request_money = routers.DefaultRouter()
+vender_request_money.register(r'^vender_request_money', VenderRequestMoneyViews, basename='vender_request_money')
+
+franchaiser_request_money = routers.DefaultRouter()
+franchaiser_request_money.register(r'^franchaiser_request_money', FanchaiserRequestMoneyViews, basename='franchaiser_request_money')
+
 
 urlpatterns = [
     path('api/v2/customer-register', CustomerView.as_view(), name='customer-registration'),
@@ -36,10 +42,15 @@ urlpatterns = [
     path('api/Account/logout',logout.as_view(),name='logout'),
     path('api/Account/register', RegisterAPI.as_view(), name='register'),
     path('api/Account/login', LoginAPI.as_view(), name='login'),
+    path('api/Account/change_password', ChangePassword.as_view(), name='change_password'),
+    path('api/Account/forgate_password', Forgetpassword.as_view(), name='forgate_password'),
+    path('api/Account/reset_password', ResetPassword.as_view(), name='reset_password'),
     re_path(r'^api/v1/', include(bank_update.urls)),
     re_path(r'^api/v1/', include(basic_update.urls)),
     re_path(r'^api/v1/', include(image_update.urls)),
     re_path(r'^api/v1/', include(franchieser_bank_update.urls)),
     re_path(r'^api/v1/', include(franchieser_basic_update.urls)),
     re_path(r'^api/v1/', include(franchieser_image_update.urls)),
+    re_path(r'^api/v1/', include(vender_request_money.urls)),
+    re_path(r'^api/v1/', include(franchaiser_request_money.urls)),
 ]

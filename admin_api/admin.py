@@ -31,4 +31,5 @@ admin.site.register(VenderWallet)
 admin.site.register(VendorRequestMoney)
 admin.site.register(VendorCallSupport)
 admin.site.register(FrenchiserWallet)
+admin.site.register(FranchieserRequestMoney)
 

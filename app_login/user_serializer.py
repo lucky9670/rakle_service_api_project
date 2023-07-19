@@ -44,3 +44,30 @@ class UserLoginSerializers(serializers.Serializer):
             raise serializers.ValidationError(msg, code='authorization')
         data['user'] = user
         return data
+    
+class ChangePasswordSerial(serializers.ModelSerializer):
+    #email=serializers.EmailField(max_length=30)
+    currentpassword=serializers.CharField(max_length=30)
+    new_password=serializers.CharField(max_length=30,min_length=4)
+    confirmpassword=serializers.CharField(max_length=20,min_length=4)
+    
+    class Meta:
+        model = UserSignupModel
+        fields = ['currentpassword','new_password','confirmpassword']
+    
+
+class ForgetPasswordSerial(serializers.ModelSerializer):
+    phone=serializers.CharField(max_length=30)
+    class Meta:
+        model = UserSignupModel
+        fields = ['phone']
+
+class ResetPasswordSerial(serializers.ModelSerializer):
+    new_password=serializers.CharField(max_length=30,min_length=4)
+    confirm_password=serializers.CharField(max_length=20,min_length=4)
+    phone=serializers.CharField(max_length=20,min_length=4)
+    otp=serializers.CharField(max_length=20,min_length=4)
+    
+    class Meta:
+        model = UserSignupModel
+        fields = ['new_password','confirm_password', 'phone', 'otp']
