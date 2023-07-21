@@ -5,13 +5,30 @@ from rest_framework.decorators import action
 from admin_api.serialization.work_serializer import *
 from rackle import settings
 from admin_api.models import *
+from app_login.models import VenderProfile
 from drf_yasg.utils import swagger_auto_schema
 from admin_api.serialization.update_serializer import *
 from admin_api.serialization.paymentserializer import *
 import razorpay
 from django.contrib.sites.shortcuts import get_current_site
 from datetime import datetime
+from geopy.distance import geodesic
+from fcm_django.models import FCMDevice
 
+def calculate_distance(lat1, lon1, lat2, lon2):
+    point1 = (lat1, lon1)
+    point2 = (lat2, lon2)
+    distance = geodesic(point1, point2).kilometers
+    return distance
+
+def get_users_within_circle(center_latitude, center_longitude, radius_km=5.0):
+    users_within_circle = []
+    all_users = VenderProfile.objects.all()
+    for user in all_users:
+        distance = calculate_distance(center_latitude, center_longitude, user.latitude, user.longitude)
+        if distance <= radius_km:
+            users_within_circle.append(user)
+    return users_within_circle
 
 
 class PaymentGateway(ViewSet):
@@ -41,6 +58,7 @@ class PaymentGateway(ViewSet):
         callback_url = 'http://'+ str(get_current_site(request))+"/api/v1/handlerequest/"
         # user = AllCustomer.objects.get(id= int(customer))
         order.order_id = razorpay_order['id']
+        order.razorpay_order_id = razorpay_order['id']
         order.total_amount = total_amount
         order.save()
 
@@ -75,7 +93,7 @@ class Checkout(ViewSet):
         }
         client = razorpay.Client(auth=(settings.razorpay_api_key, settings.razorpay_api_secret_key))
         try:
-            order_db = Order.objects.get(razorpay_order_id=order_id)
+            order_db = Order.objects.get(order_id=order_id)
             ser_detail = AddToCart.objects.get(id=order_db.cart_detail)
         except:
             return Response({"offer" : "505 Not Found"})
@@ -85,7 +103,6 @@ class Checkout(ViewSet):
         result = client.utility.verify_payment_signature(params_dict)
         if result==True:
             amount = order_db.total_amount * 100   #we have to pass in paisa
-            print(amount)
             try:
                 client.payment.capture(payment_id, amount)
                 order_db.payment_status = 1
@@ -94,9 +111,12 @@ class Checkout(ViewSet):
                 ser_detail.save()
                 customer = AllCustomer.objects.get(customer= order_db.order_db)
                 OrderAcceptance.objects.create(customer = customer, order = order_db)
-                return Response({
-                    "payment_status": "Success",
-                })
+                users_within_circle = get_users_within_circle(order_db.address.latitude, order_db.address.longitude)
+                for user in users_within_circle:
+                    print(user.username, user.latitude, user.longitude)
+                    device = FCMDevice.objects.get(user=user.id, registration_id= user.notification_id)
+                    device.send_message(title="title", body="body")
+                return Response({"payment_status": "Success",})
             except:
                 order_db.payment_status = 2
                 order_db.save()

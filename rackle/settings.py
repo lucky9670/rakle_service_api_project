@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_filters',
     'knox',
     'drf_yasg',
+    'fcm_django',
 ]
 
 MIDDLEWARE = [
@@ -93,6 +94,10 @@ REST_KNOX = {
     # 'TOKEN_TTL': timedelta(minutes=30),
     'TOKEN_TTL': None,
 
+}
+
+FCM_DJANGO_SETTINGS = {
+    "FCM_SERVER_KEY": "AAAA9WWgaIo:APA91bEQcS6WddBslCIbVGTdVGXFY-xZYEqkLW0EcrNMpDEgAMHADzenEHmgnyvRO0ZJHXpKDciFm5fk5GxAF_W5fKxJzHhkn_9mbsIn5VgQuP4_jBAmmX9bHAoCfv4cYzGzjQDNl9IF",
 }
 
 ROOT_URLCONF = 'rackle.urls'
