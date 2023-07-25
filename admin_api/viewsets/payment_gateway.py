@@ -13,7 +13,7 @@ import razorpay
 from django.contrib.sites.shortcuts import get_current_site
 from datetime import datetime
 from geopy.distance import geodesic
-from fcm_django.models import FCMDevice
+import requests
 
 def calculate_distance(lat1, lon1, lat2, lon2):
     point1 = (lat1, lon1)
@@ -23,11 +23,15 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
 def get_users_within_circle(center_latitude, center_longitude, radius_km=5.0):
     users_within_circle = []
-    all_users = VenderProfile.objects.all()
+    all_users = UserSignupModel.objects.filter(role = 3)
     for user in all_users:
-        distance = calculate_distance(center_latitude, center_longitude, user.latitude, user.longitude)
-        if distance <= radius_km:
-            users_within_circle.append(user)
+        try:
+            vender = VenderProfile.objects.get(user = user)
+            distance = calculate_distance(center_latitude, center_longitude, float(vender.latitude), float(vender.longitude))
+            if distance <= radius_km:
+                users_within_circle.append(vender)
+        except  Exception as e:
+            print(e)
     return users_within_circle
 
 
@@ -111,11 +115,20 @@ class Checkout(ViewSet):
                 ser_detail.save()
                 customer = AllCustomer.objects.get(customer= order_db.order_db)
                 OrderAcceptance.objects.create(customer = customer, order = order_db)
-                users_within_circle = get_users_within_circle(order_db.address.latitude, order_db.address.longitude)
-                for user in users_within_circle:
-                    print(user.username, user.latitude, user.longitude)
-                    device = FCMDevice.objects.get(user=user.id, registration_id= user.notification_id)
-                    device.send_message(title="title", body="body")
+                users_within_circle = get_users_within_circle(float(order_db.address.latitude), float(order_db.address.longitude))
+                for user in users_within_circle:    
+                    try:
+                        url = "https://naksa.org/api/v1/send_notification"
+                        data = {
+                            "title": "demo",
+                            "text": "ab@hsssh.in",
+                            "registration_id": user.notification_id,
+                            "orderid": order_db.id
+                        }
+                        data = requests.post(url, json = data)
+                    except:
+                        return Response({"status": "Failed due to api not working",})
+                    print("Massage Send")
                 return Response({"payment_status": "Success",})
             except:
                 order_db.payment_status = 2

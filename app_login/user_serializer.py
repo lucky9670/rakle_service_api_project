@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import UserSignupModel, VenderProfile, FranchieserProfile
 from django.contrib.auth import authenticate
-from fcm_django.models import FCMDevice
 
 class ResiterSerializer(serializers.ModelSerializer):
     token = serializers.CharField(write_only=True, required = True)
@@ -13,9 +12,6 @@ class ResiterSerializer(serializers.ModelSerializer):
         user = UserSignupModel.objects.create_user(username=validated_data['phone'],phone=validated_data['phone'], password=validated_data['password'],name=validated_data['name'],role=validated_data['role'],  franchiser = validated_data['franchiser'])
         if validated_data['role'] == 3:
             vender_obj = VenderProfile.objects.create(user=user, notification_id = validated_data['token'])
-            ofcdevice_obj = FCMDevice.objects.filter(registration_id=validated_data['token'], user=user)
-            if not ofcdevice_obj:
-                FCMDevice.objects.create(registration_id=validated_data['token'], type="android", user=user)
             
         if validated_data['role'] == 2:
             FranchieserProfile.objects.create(user=user)

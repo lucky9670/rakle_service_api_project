@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from firebase_admin import initialize_app
 # import django_heroku
 # django_heroku.settings(locals())
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,7 +33,7 @@ SECRET_KEY = '0o#sy1x(3-_rkn3cx1ub0&eej-30ql3)$c6@7m2@s4ncilm2#f'
 DEBUG = True
 # TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = ["rakle-api.herokuapp.com", "localhost", "127.0.0.1"]
-
+initialize_app()
 CORS_ORIGIN_ALLOW_ALL = True
 
 
@@ -53,7 +54,6 @@ INSTALLED_APPS = [
     'django_filters',
     'knox',
     'drf_yasg',
-    'fcm_django',
 ]
 
 MIDDLEWARE = [
@@ -94,10 +94,6 @@ REST_KNOX = {
     # 'TOKEN_TTL': timedelta(minutes=30),
     'TOKEN_TTL': None,
 
-}
-
-FCM_DJANGO_SETTINGS = {
-    "FCM_SERVER_KEY": "AAAA9WWgaIo:APA91bEQcS6WddBslCIbVGTdVGXFY-xZYEqkLW0EcrNMpDEgAMHADzenEHmgnyvRO0ZJHXpKDciFm5fk5GxAF_W5fKxJzHhkn_9mbsIn5VgQuP4_jBAmmX9bHAoCfv4cYzGzjQDNl9IF",
 }
 
 ROOT_URLCONF = 'rackle.urls'
